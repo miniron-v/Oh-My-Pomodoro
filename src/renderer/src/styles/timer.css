@@ -1,0 +1,41 @@
+.timer-page {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: transparent;
+  -webkit-app-region: drag;
+  cursor: move;
+}
+
+.timer-phase {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
+  white-space: nowrap;
+}
+
+.time-display {
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 0 8px rgba(74, 158, 255, 0.6);
+  white-space: nowrap;
+}
+
+.timer-stop {
+  -webkit-app-region: no-drag;
+  background: none;
+  border: none;
+  color: rgba(255, 100, 100, 0.8);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px 4px;
+  line-height: 1;
+}
+
+.timer-stop:hover {
+  color: rgba(255, 100, 100, 1);
+}

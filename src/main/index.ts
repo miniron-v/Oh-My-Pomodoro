@@ -4,6 +4,7 @@ import { createSettingsWindow, hideSettingsWindow, showSettingsWindow } from './
 import { createTimerWindow, destroyTimerWindow, getTimerWindow } from './windows/timerWindow'
 import { createVideoWindow, destroyVideoWindow } from './windows/videoWindow'
 import { registerIpcHandlers } from './ipc/handlers'
+import { startPomodoro, stopPomodoro, handleVideoEnded, handleVideoSkip } from './timer/PomodoroEngine'
 
 app.whenReady().then(() => {
   const settingsWindow = createSettingsWindow()
@@ -13,12 +14,22 @@ app.whenReady().then(() => {
     hideSettingsWindow()
     createTimerWindow()
     createVideoWindow()
+    startPomodoro()
   })
 
   ipcMain.on(IPC_CHANNELS.TIMER_STOP, () => {
+    stopPomodoro()
     destroyTimerWindow()
     destroyVideoWindow()
     showSettingsWindow()
+  })
+
+  ipcMain.on(IPC_CHANNELS.VIDEO_ENDED, () => {
+    handleVideoEnded()
+  })
+
+  ipcMain.on(IPC_CHANNELS.VIDEO_SKIP, () => {
+    handleVideoSkip()
   })
 })
 

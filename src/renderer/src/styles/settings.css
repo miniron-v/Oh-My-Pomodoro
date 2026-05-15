@@ -1,0 +1,151 @@
+.settings-page {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.settings-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 18px;
+  color: #888;
+}
+
+.settings-form {
+  max-width: 460px;
+  margin: 0 auto;
+}
+
+.settings-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.settings-section {
+  margin-bottom: 24px;
+}
+
+.settings-section h2 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ccc;
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #333;
+}
+
+.settings-hint {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 12px;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.setting-row label {
+  font-size: 14px;
+  color: #ddd;
+}
+
+.setting-row input[type='number'],
+.setting-row select {
+  width: 100px;
+  padding: 6px 10px;
+  border: 1px solid #444;
+  border-radius: 4px;
+  background: #2a2a3e;
+  color: #fff;
+  font-size: 14px;
+  text-align: center;
+}
+
+.setting-row select {
+  width: 160px;
+  text-align: left;
+}
+
+.media-group {
+  margin-bottom: 16px;
+}
+
+.media-group label {
+  display: block;
+  font-size: 14px;
+  color: #ddd;
+  margin-bottom: 6px;
+}
+
+.media-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.media-display {
+  flex: 1;
+  font-size: 13px;
+  color: #aaa;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.media-controls button {
+  padding: 4px 12px;
+  border: 1px solid #555;
+  border-radius: 4px;
+  background: #333;
+  color: #ddd;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.media-controls button:hover {
+  background: #444;
+}
+
+.media-group input[type='text'] {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid #444;
+  border-radius: 4px;
+  background: #2a2a3e;
+  color: #fff;
+  font-size: 13px;
+}
+
+.media-group input[type='text']::placeholder {
+  color: #666;
+}
+
+.start-button {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  margin-top: 24px;
+  border: none;
+  border-radius: 8px;
+  background: #4a9eff;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.start-button:hover {
+  background: #3a8eef;
+}
