@@ -16,6 +16,11 @@ export default function VideoPage(): React.ReactElement {
   }, [])
 
   useEffect(() => {
+    document.body.classList.add('video-page-body')
+    return () => document.body.classList.remove('video-page-body')
+  }, [])
+
+  useEffect(() => {
     window.electronAPI.onPlayVideo((source, soundMode) => {
       setPlayRequest({ source, soundMode })
     })

@@ -129,6 +129,8 @@ function GifPlayer({
             canvas!.height = ch
           }
 
+          ctx!.clearRect(0, 0, cw, ch)
+
           const fw = frame.displayWidth
           const fh = frame.displayHeight
           const scale = Math.max(cw / fw, ch / fh)
@@ -211,6 +213,8 @@ function VideoPlayer({
           canvas!.width = cw
           canvas!.height = ch
         }
+
+        ctx!.clearRect(0, 0, cw, ch)
 
         const vw = video.videoWidth
         const vh = video.videoHeight
