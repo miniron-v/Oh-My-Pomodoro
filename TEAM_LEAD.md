@@ -43,7 +43,16 @@
 
 [8] 사용자 테스트
  └─ 사용자가 테스트 시나리오를 실행
- └─ 실패 시 원인 분석 후 [5]~[6] 반복
+ └─ 실패 시 [8-1] 디버깅 프로세스 진입
+
+[8-1] 디버깅 프로세스 (버그 발생 시)
+ └─ 추측으로 코드를 수정하지 않는다
+ └─ (1) 관련 위치에 디버그 로그 추가 (console.log, DevTools 등)
+ └─ (2) 사용자에게 재현 요청, 로그 결과 수집
+ └─ (3) 로그로 원인 확정
+ └─ (4) 확정된 원인만 수정
+ └─ (5) 커밋 전 모든 디버그 코드 제거 (console.log, openDevTools 등)
+ └─ 한 번에 여러 가설을 동시에 수정하지 않는다
 
 [9] 문서 갱신
  └─ 이번 세션에서 작업한 내역을 관련 문서에 반영
@@ -173,6 +182,8 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 | 1 | IPC 골격, 설정 저장소, 창 관리 모듈 | `feature/core-features` | 완료 |
 | 2 | 뽀모도로 엔진, 설정 UI, 미니 타이머 UI | `feature/core-features` | 완료 |
 | 3 | 영상/gif 재생, media:// 프로토콜, 전체 통합 | `feature/core-features` | 완료 |
+| - | 일시정지/재개 기능, 반응형 타이머 UI | `feature/core-features` | 완료 |
+| - | 앱 아이콘, 빌드 설정(zip), v0.1.0 릴리즈 | `develop` | 완료 |
 
 ---
 
@@ -181,16 +192,17 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 | 항목 | 상태 |
 |---|---|
 | 기획서 | 확정 (`docs/SPEC.md`) |
-| 작업 계획 | Phase 0~3 완료, Phase 4 진행 예정 |
-| 현재 브랜치 | `feature/core-features` |
-| 현재 단계 | **Phase 4 — 알림음 리소스 추가, 최종 통합 테스트** |
+| 작업 계획 | Phase 0~3 완료, v0.1.0 릴리즈 완료 |
+| 현재 브랜치 | `main` |
+| 현재 단계 | **v0.1.0 릴리즈 완료, Phase 4 진행 예정** |
 
-### Phase 4 남은 작업
+### 남은 작업
 
 | Task | 내용 | 상태 |
 |---|---|---|
 | 4-1 | 내장 알림음 리소스 추가 | 미진행 |
 | 4-3 | 최종 통합 테스트 및 버그 수정 | 미진행 |
+| - | `src/main/util/gifDuration.ts` 빈 파일 삭제 | 미진행 (수동 삭제 필요) |
 
 ### 기술 결정 사항 (구현 과정에서 확정)
 
@@ -203,6 +215,8 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 | gif 재생 | ImageDecoder API + IPC 파일 읽기 | fetch가 커스텀 프로토콜 미지원, 정확한 1회 재생 |
 | 로컬 파일 접근 | media:// 커스텀 프로토콜 + readFileSync + Range 지원 | 보안(allowedMediaPaths) + 비디오 스트리밍 |
 | 타이머 정확도 | Date.now() 기반, backgroundThrottling: false | 시스템 슬립/백그라운드 대응 |
+| 배포 형태 | zip (NSIS 아님) | 코드 서명 없는 상태에서 SmartScreen 허들 최소화 |
+| 아이콘 변환 | png-to-ico로 멀티사이즈 ico 생성 | electron-builder는 멀티사이즈 ico 미생성 |
 
 ---
 
@@ -213,3 +227,4 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 | 2026-05-15 | 최초 작성. 워크플로우, 설계 규칙, 리뷰 기준 정의. |
 | 2026-05-15 | 워크플로우에 [9] 문서 갱신 단계 추가. 기존 권장 리뷰 기준(A1~A4)을 필수(R6~R9)로 격상. 에이전트 프롬프트에 문서 경로 명시 원칙 추가. |
 | 2026-05-15 | Phase 0~3 완료 반영. 기술 결정 사항, 완료 작업 이력, Phase 4 계획 추가. |
+| 2026-05-15 | v0.1.0 릴리즈 완료. 디버깅 프로세스[8-1] 워크플로우에 추가. 빌드/배포 기술 결정 추가. |
