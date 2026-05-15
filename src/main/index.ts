@@ -2,13 +2,14 @@ import { app, ipcMain, Menu, globalShortcut } from 'electron'
 import { existsSync } from 'fs'
 import { IPC_CHANNELS } from '../shared/types'
 import { createSettingsWindow, hideSettingsWindow, showSettingsWindow } from './windows/settingsWindow'
-import { createTimerWindow, destroyTimerWindow, getTimerWindow } from './windows/timerWindow'
+import { createTimerWindow, destroyTimerWindow, getTimerWindow, hideTimerWindow, showTimerWindow } from './windows/timerWindow'
 import { createVideoWindow, destroyVideoWindow } from './windows/videoWindow'
 import { registerIpcHandlers } from './ipc/handlers'
 import { registerMediaProtocol } from './protocol/mediaProtocol'
 import { startPomodoro, stopPomodoro, pausePomodoro, resumePomodoro, handleVideoEnded, handleVideoSkip } from './timer/PomodoroEngine'
 import { getSettings, setSettings } from './store/settingsStore'
 import { addMedia } from './store/mediaStore'
+import { createAppTray, destroyAppTray, updateTrayMenu } from './tray/appTray'
 
 function migrateOldMediaPaths(): void {
   const settings = getSettings() as Record<string, unknown>
@@ -66,11 +67,13 @@ app.whenReady().then(() => {
     hideSettingsWindow()
     createTimerWindow()
     createVideoWindow()
+    createAppTray()
     startPomodoro()
   })
 
   ipcMain.on(IPC_CHANNELS.TIMER_STOP, () => {
     stopPomodoro()
+    destroyAppTray()
     destroyTimerWindow()
     destroyVideoWindow()
     showSettingsWindow()
@@ -82,6 +85,16 @@ app.whenReady().then(() => {
 
   ipcMain.on(IPC_CHANNELS.TIMER_RESUME, () => {
     resumePomodoro()
+  })
+
+  ipcMain.on(IPC_CHANNELS.TIMER_HIDE, () => {
+    hideTimerWindow()
+    updateTrayMenu()
+  })
+
+  ipcMain.on(IPC_CHANNELS.TIMER_SHOW, () => {
+    showTimerWindow()
+    updateTrayMenu()
   })
 
   ipcMain.on(IPC_CHANNELS.VIDEO_ENDED, () => {

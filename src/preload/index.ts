@@ -18,6 +18,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   stopTimer: () => ipcRenderer.send(IPC_CHANNELS.TIMER_STOP),
   pauseTimer: () => ipcRenderer.send(IPC_CHANNELS.TIMER_PAUSE),
   resumeTimer: () => ipcRenderer.send(IPC_CHANNELS.TIMER_RESUME),
+  hideTimer: () => ipcRenderer.send(IPC_CHANNELS.TIMER_HIDE),
+  showTimer: () => ipcRenderer.send(IPC_CHANNELS.TIMER_SHOW),
 
   onTick: (callback: (remainingSeconds: number) => void) => {
     ipcRenderer.on(IPC_CHANNELS.TIMER_TICK, (_event, remainingSeconds) =>
