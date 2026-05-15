@@ -1,0 +1,15 @@
+appId: com.oh-my-pomodoro.app
+productName: Oh-My-Pomodoro
+directories:
+  buildResources: resources
+  output: dist
+files:
+  - out/**/*
+  - resources/**/*
+extraResources:
+  - from: resources/sounds
+    to: sounds
+win:
+  target:
+    - nsis
+  icon: resources/icon.ico
