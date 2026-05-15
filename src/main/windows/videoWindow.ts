@@ -14,8 +14,8 @@ export function createVideoWindow(): BrowserWindow {
     y: 0,
     alwaysOnTop: true,
     frame: false,
-    transparent: false,
-    backgroundColor: '#000000',
+    transparent: true,
+    backgroundColor: '#00000000',
     show: false,
     skipTaskbar: true,
     webPreferences: {
@@ -47,6 +47,8 @@ export function getVideoWindow(): BrowserWindow | null {
 
 export function showVideoWindow(): void {
   if (videoWindow) {
+    videoWindow.setIgnoreMouseEvents(false)
+    videoWindow.setOpacity(1)
     videoWindow.show()
     videoWindow.focus()
     videoWindow.setAlwaysOnTop(true, 'screen-saver')
@@ -55,7 +57,8 @@ export function showVideoWindow(): void {
 
 export function hideVideoWindow(): void {
   if (videoWindow) {
-    videoWindow.hide()
+    videoWindow.setOpacity(0)
+    videoWindow.setIgnoreMouseEvents(true)
   }
 }
 
