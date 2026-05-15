@@ -21,5 +21,4 @@ extraResources:
 win:
   target:
     - zip
-  icon: resources/icon.png
 forceCodeSigning: false
