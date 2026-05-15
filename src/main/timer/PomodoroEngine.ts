@@ -1,5 +1,6 @@
 import { type TimerPhase, type AppSettings, IPC_CHANNELS } from '../../shared/types'
 import { getSettings } from '../store/settingsStore'
+import { getMediaStoredPath } from '../store/mediaStore'
 import { getTimerWindow } from '../windows/timerWindow'
 import { getVideoWindow, showVideoWindow, hideVideoWindow } from '../windows/videoWindow'
 
@@ -93,6 +94,11 @@ function clearMediaTimer(): void {
   }
 }
 
+function resolveMediaPath(mediaId: string | null): string | null {
+  if (!mediaId) return null
+  return getMediaStoredPath(mediaId)
+}
+
 function onPhaseTimerEnd(): void {
   const settings = getSettings()
 
@@ -100,10 +106,10 @@ function onPhaseTimerEnd(): void {
     state.completedWorkSessions++
     const isLongBreak = state.completedWorkSessions % settings.longBreakInterval === 0
     state.nextPhaseAfterVideo = isLongBreak ? 'long-break' : 'short-break'
-    playTransitionVideo(settings.endVideoSource, settings.soundMode)
+    playTransitionVideo(resolveMediaPath(settings.endMediaId), settings.soundMode)
   } else if (state.phase === 'short-break' || state.phase === 'long-break') {
     state.nextPhaseAfterVideo = 'work'
-    playTransitionVideo(settings.startVideoSource, settings.soundMode)
+    playTransitionVideo(resolveMediaPath(settings.startMediaId), settings.soundMode)
   }
 }
 

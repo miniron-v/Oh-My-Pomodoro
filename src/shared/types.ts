@@ -7,13 +7,20 @@ export interface TimerState {
   nextPhaseAfterVideo: Exclude<TimerPhase, 'idle' | 'video-playing'> | null
 }
 
+export interface MediaEntry {
+  id: string
+  originalName: string
+  storedFileName: string
+  addedAt: string
+}
+
 export interface AppSettings {
   workMinutes: number
   shortBreakMinutes: number
   longBreakMinutes: number
   longBreakInterval: number
-  startVideoSource: string | null
-  endVideoSource: string | null
+  startMediaId: string | null
+  endMediaId: string | null
   soundMode: 'video' | 'alarm'
 }
 
@@ -22,8 +29,8 @@ export const DEFAULT_SETTINGS: AppSettings = {
   shortBreakMinutes: 5,
   longBreakMinutes: 15,
   longBreakInterval: 4,
-  startVideoSource: null,
-  endVideoSource: null,
+  startMediaId: null,
+  endMediaId: null,
   soundMode: 'video'
 }
 
@@ -40,8 +47,11 @@ export const IPC_CHANNELS = {
   VIDEO_SKIP: 'video:skip',
   SETTINGS_GET: 'settings:get',
   SETTINGS_SET: 'settings:set',
-  SETTINGS_SELECT_FILE: 'settings:select-file',
-  MEDIA_READ_FILE: 'media:read-file'
+  MEDIA_READ_FILE: 'media:read-file',
+  MEDIA_LIST: 'media:list',
+  MEDIA_ADD: 'media:add',
+  MEDIA_REMOVE: 'media:remove',
+  MEDIA_GET_PATH: 'media:get-path'
 } as const
 
 export type IpcChannel = (typeof IPC_CHANNELS)[keyof typeof IPC_CHANNELS]
@@ -51,7 +61,11 @@ export const ALLOWED_IPC_CHANNELS: readonly IpcChannel[] = Object.values(IPC_CHA
 export interface ElectronAPI {
   getSettings: () => Promise<AppSettings>
   setSettings: (settings: AppSettings) => Promise<void>
-  selectFile: (filters: { name: string; extensions: string[] }[]) => Promise<string | null>
+
+  listMedia: () => Promise<MediaEntry[]>
+  addMedia: () => Promise<MediaEntry | null>
+  removeMedia: (id: string) => Promise<void>
+  getMediaPath: (id: string) => Promise<string | null>
 
   startTimer: () => void
   stopTimer: () => void

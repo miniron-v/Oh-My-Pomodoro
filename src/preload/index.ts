@@ -8,8 +8,11 @@ function isAllowedChannel(channel: string): channel is IpcChannel {
 contextBridge.exposeInMainWorld('electronAPI', {
   getSettings: () => ipcRenderer.invoke(IPC_CHANNELS.SETTINGS_GET),
   setSettings: (settings: unknown) => ipcRenderer.invoke(IPC_CHANNELS.SETTINGS_SET, settings),
-  selectFile: (filters: Electron.FileFilter[]) =>
-    ipcRenderer.invoke(IPC_CHANNELS.SETTINGS_SELECT_FILE, filters),
+
+  listMedia: () => ipcRenderer.invoke(IPC_CHANNELS.MEDIA_LIST),
+  addMedia: () => ipcRenderer.invoke(IPC_CHANNELS.MEDIA_ADD),
+  removeMedia: (id: string) => ipcRenderer.invoke(IPC_CHANNELS.MEDIA_REMOVE, id),
+  getMediaPath: (id: string) => ipcRenderer.invoke(IPC_CHANNELS.MEDIA_GET_PATH, id),
 
   startTimer: () => ipcRenderer.send(IPC_CHANNELS.TIMER_START),
   stopTimer: () => ipcRenderer.send(IPC_CHANNELS.TIMER_STOP),

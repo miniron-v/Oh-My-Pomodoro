@@ -2,17 +2,12 @@ import { ipcMain, dialog, type BrowserWindow } from 'electron'
 import { readFileSync } from 'fs'
 import { IPC_CHANNELS } from '../../shared/types'
 import { getSettings, setSettings } from '../store/settingsStore'
+import { listMedia, addMedia, removeMedia, getMediaStoredPath, getMediaDir } from '../store/mediaStore'
 import type { AppSettings } from '../../shared/types'
 
-const allowedMediaPaths: Set<string> = new Set()
-
-export function getAllowedMediaPaths(): ReadonlySet<string> {
-  return allowedMediaPaths
-}
-
-export function addAllowedMediaPath(path: string): void {
-  allowedMediaPaths.add(path)
-}
+const MEDIA_FILTERS: Electron.FileFilter[] = [
+  { name: 'Media', extensions: ['mp4', 'webm', 'gif', 'mov', 'avi'] }
+]
 
 function isValidSettings(value: unknown): value is AppSettings {
   if (typeof value !== 'object' || value === null) return false
@@ -22,21 +17,10 @@ function isValidSettings(value: unknown): value is AppSettings {
     typeof s.shortBreakMinutes === 'number' &&
     typeof s.longBreakMinutes === 'number' &&
     typeof s.longBreakInterval === 'number' &&
-    (typeof s.startVideoSource === 'string' || s.startVideoSource === null) &&
-    (typeof s.endVideoSource === 'string' || s.endVideoSource === null) &&
+    (typeof s.startMediaId === 'string' || s.startMediaId === null) &&
+    (typeof s.endMediaId === 'string' || s.endMediaId === null) &&
     (s.soundMode === 'video' || s.soundMode === 'alarm')
   )
-}
-
-function isAllowedUrl(source: string): boolean {
-  return source.startsWith('https://') || source.startsWith('http://')
-}
-
-function validateMediaSource(source: string | null): boolean {
-  if (source === null) return true
-  if (isAllowedUrl(source)) return true
-  if (allowedMediaPaths.has(source)) return true
-  return false
 }
 
 export function registerIpcHandlers(_settingsWindow: BrowserWindow): void {
@@ -48,36 +32,57 @@ export function registerIpcHandlers(_settingsWindow: BrowserWindow): void {
     if (!isValidSettings(settings)) {
       throw new Error('Invalid settings format')
     }
-    if (!validateMediaSource(settings.startVideoSource)) {
-      throw new Error('Unauthorized media source: startVideoSource')
-    }
-    if (!validateMediaSource(settings.endVideoSource)) {
-      throw new Error('Unauthorized media source: endVideoSource')
-    }
     setSettings(settings)
   })
 
+  ipcMain.handle(IPC_CHANNELS.MEDIA_LIST, () => {
+    return listMedia()
+  })
+
+  ipcMain.handle(IPC_CHANNELS.MEDIA_ADD, async () => {
+    const result = await dialog.showOpenDialog({
+      properties: ['openFile'],
+      filters: MEDIA_FILTERS
+    })
+    if (result.canceled || result.filePaths.length === 0) {
+      return null
+    }
+    return addMedia(result.filePaths[0])
+  })
+
+  ipcMain.handle(IPC_CHANNELS.MEDIA_REMOVE, (_event, id: string) => {
+    if (typeof id !== 'string') {
+      throw new Error('Invalid media id')
+    }
+
+    const settings = getSettings()
+    if (settings.startMediaId === id) {
+      setSettings({ ...settings, startMediaId: null })
+    }
+    if (settings.endMediaId === id) {
+      const current = getSettings()
+      setSettings({ ...current, endMediaId: null })
+    }
+
+    removeMedia(id)
+  })
+
+  ipcMain.handle(IPC_CHANNELS.MEDIA_GET_PATH, (_event, id: string) => {
+    if (typeof id !== 'string') {
+      throw new Error('Invalid media id')
+    }
+    return getMediaStoredPath(id)
+  })
+
   ipcMain.handle(IPC_CHANNELS.MEDIA_READ_FILE, (_event, source: string) => {
-    if (!allowedMediaPaths.has(source)) {
+    if (typeof source !== 'string') {
+      throw new Error('Invalid media source')
+    }
+    const mediaBaseDir = getMediaDir()
+    if (!source.startsWith(mediaBaseDir)) {
       throw new Error('Unauthorized media path')
     }
     const data = readFileSync(source)
     return data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength)
   })
-
-  ipcMain.handle(
-    IPC_CHANNELS.SETTINGS_SELECT_FILE,
-    async (_event, filters: Electron.FileFilter[]) => {
-      const result = await dialog.showOpenDialog({
-        properties: ['openFile'],
-        filters
-      })
-      if (result.canceled || result.filePaths.length === 0) {
-        return null
-      }
-      const filePath = result.filePaths[0]
-      allowedMediaPaths.add(filePath)
-      return filePath
-    }
-  )
 }
