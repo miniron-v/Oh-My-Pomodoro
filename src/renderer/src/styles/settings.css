@@ -85,45 +85,21 @@
   margin-bottom: 16px;
 }
 
-.media-group label {
+.media-group > label {
   display: block;
   font-size: 14px;
   color: #ddd;
   margin-bottom: 6px;
 }
 
-.media-controls {
+.media-dropdown-container {
+  position: relative;
+}
+
+.media-dropdown-trigger {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
-}
-
-.media-display {
-  flex: 1;
-  font-size: 13px;
-  color: #aaa;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.media-controls button {
-  padding: 4px 12px;
-  border: 1px solid #555;
-  border-radius: 4px;
-  background: #333;
-  color: #ddd;
-  font-size: 12px;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.media-controls button:hover {
-  background: #444;
-}
-
-.media-group input[type='text'] {
+  justify-content: space-between;
   width: 100%;
   padding: 6px 10px;
   border: 1px solid #444;
@@ -131,10 +107,98 @@
   background: #2a2a3e;
   color: #fff;
   font-size: 13px;
+  cursor: pointer;
+  text-align: left;
 }
 
-.media-group input[type='text']::placeholder {
-  color: #666;
+.media-dropdown-trigger:hover {
+  border-color: #666;
+}
+
+.media-dropdown-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.media-dropdown-arrow {
+  font-size: 10px;
+  color: #888;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+.media-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #444;
+  border-radius: 4px;
+  background: #2a2a3e;
+  z-index: 10;
+}
+
+.media-dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #ddd;
+}
+
+.media-dropdown-item:hover {
+  background: #3a3a50;
+}
+
+.media-dropdown-item.selected {
+  background: #3a3a50;
+  color: #fff;
+}
+
+.media-dropdown-item-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.media-dropdown-item-remove {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  margin-left: 8px;
+  border: none;
+  border-radius: 3px;
+  background: transparent;
+  color: #888;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.media-dropdown-item-remove:hover {
+  background: #5a2222;
+  color: #e88;
+}
+
+.media-dropdown-add {
+  border-top: 1px solid #444;
+  color: #4a9eff;
+}
+
+.media-dropdown-add:hover {
+  background: #2a3a50;
 }
 
 .start-button {

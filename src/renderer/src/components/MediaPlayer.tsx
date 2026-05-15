@@ -36,23 +36,11 @@ interface ImageDecoderConstructor {
 }
 
 function toPlayableUrl(source: string): string {
-  if (source.startsWith('http://') || source.startsWith('https://')) {
-    return source
-  }
   return 'media://host/' + encodeURIComponent(source)
 }
 
 function isGif(source: string): boolean {
-  const lower = source.toLowerCase()
-  if (lower.startsWith('http://') || lower.startsWith('https://')) {
-    try {
-      const pathname = new URL(lower).pathname
-      return pathname.endsWith('.gif')
-    } catch {
-      return lower.endsWith('.gif')
-    }
-  }
-  return lower.endsWith('.gif')
+  return source.toLowerCase().endsWith('.gif')
 }
 
 function delay(ms: number): Promise<void> {
@@ -81,10 +69,6 @@ function GifPlayer({
     let decoder: ImageDecoderInstance | null = null
 
     async function loadGifBuffer(): Promise<ArrayBuffer> {
-      if (source.startsWith('http://') || source.startsWith('https://')) {
-        const response = await fetch(source)
-        return response.arrayBuffer()
-      }
       return window.electronAPI.readMediaFile(source)
     }
 
@@ -145,9 +129,11 @@ function GifPlayer({
             canvas!.height = ch
           }
 
+          ctx!.clearRect(0, 0, cw, ch)
+
           const fw = frame.displayWidth
           const fh = frame.displayHeight
-          const scale = Math.max(cw / fw, ch / fh)
+          const scale = Math.min(cw / fw, ch / fh)
           const dw = fw * scale
           const dh = fh * scale
           const dx = (cw - dw) / 2
@@ -228,9 +214,11 @@ function VideoPlayer({
           canvas!.height = ch
         }
 
+        ctx!.clearRect(0, 0, cw, ch)
+
         const vw = video.videoWidth
         const vh = video.videoHeight
-        const scale = Math.max(cw / vw, ch / vh)
+        const scale = Math.min(cw / vw, ch / vh)
         const dw = vw * scale
         const dh = vh * scale
         const dx = (cw - dw) / 2

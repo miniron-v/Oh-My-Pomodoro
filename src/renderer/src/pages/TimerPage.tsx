@@ -30,8 +30,15 @@ export default function TimerPage(): React.ReactElement {
     window.electronAPI.stopTimer()
   }
 
+  function handleHide(): void {
+    window.electronAPI.hideTimer()
+  }
+
   return (
     <div className="timer-page">
+      <button className="timer-hide-btn" onClick={handleHide} title="숨기기">
+        <span className="icon-hide" />
+      </button>
       <div className="timer-phase">{PHASE_LABELS[phase] ?? ''}</div>
       <TimeDisplay seconds={remainingSeconds} />
       <div className="timer-controls">

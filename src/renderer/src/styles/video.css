@@ -1,11 +1,15 @@
 .video-page {
   width: 100%;
   height: 100%;
-  background: #000;
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+}
+
+.video-page-body {
+  background-color: transparent !important;
 }
 
 .media-fullscreen {

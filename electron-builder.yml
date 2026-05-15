@@ -18,6 +18,8 @@ extraResources:
     filter:
       - "**/*"
       - "!.gitkeep"
+  - from: resources/icon.png
+    to: icon.png
 win:
   target:
     - zip

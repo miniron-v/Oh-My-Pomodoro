@@ -187,6 +187,10 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 | 3 | 영상/gif 재생, media:// 프로토콜, 전체 통합 | `feature/core-features` | 완료 |
 | - | 일시정지/재개 기능, 반응형 타이머 UI | `feature/core-features` | 완료 |
 | - | 앱 아이콘, 빌드 설정(zip), v0.1.0 릴리즈 | `develop` | 완료 |
+| 5-1 | 미디어 파일 앱 내 저장 + 드롭다운 UI | `feature/media-library` | 완료 |
+| 5-2 | 영상 창 투명 배경 (알파 채널 보존) | `feature/transparent-video` | 완료 |
+| 5-3 | 타이머 창 숨기기 + 시스템 트레이 | `feature/timer-hide-tray` | 완료 |
+| 5-4 | 타이머 창 상태 기억 (위치/크기/숨기기) | `feature/timer-state-persist` | 완료 |
 
 ---
 
@@ -195,9 +199,9 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 | 항목 | 상태 |
 |---|---|
 | 기획서 | 확정 (`docs/SPEC.md`) |
-| 작업 계획 | Phase 0~3 완료, v0.1.0 릴리즈 완료 |
-| 현재 브랜치 | `main` |
-| 현재 단계 | **v0.1.0 릴리즈 완료, Phase 4 진행 예정** |
+| 작업 계획 | Phase 0~3 완료, Phase 5 완료, 릴리즈 준비 중 |
+| 현재 브랜치 | `develop` |
+| 현재 단계 | **Phase 5 완료, v0.2.0 릴리즈 준비** |
 
 ### 남은 작업
 
@@ -205,6 +209,7 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 |---|---|---|
 | 4-1 | 내장 알림음 리소스 추가 | 미진행 |
 | 4-3 | 최종 통합 테스트 및 버그 수정 | 미진행 |
+| 5-5 | macOS 지원 (빌드 설정 + 플랫폼 분기) | 계획만 |
 
 ### 기술 결정 사항 (구현 과정에서 확정)
 
@@ -212,10 +217,13 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 |---|---|---|
 | 기술 스택 | Electron 42 + React 19 + TypeScript, electron-vite | HMR, main/preload/renderer 분리 빌드 |
 | 창 구조 | 설정 / 미니 타이머 / 전체화면 영상, 3개 분리 | 독립적 생명주기, alwaysOnTop 레벨 분리 |
-| 영상 창 | 불투명(#000), frameless, 모니터 크기 | 투명 창은 Windows에서 hide/show 불가 |
-| 영상 렌더링 | Canvas 기반 (document.createElement video) | React StrictMode 이중 마운트 회피 |
+| 영상 창 | transparent + setOpacity/setIgnoreMouseEvents | 알파 채널 보존, Windows hide/show 우회 |
+| 영상 렌더링 | Canvas 기반 (document.createElement video) + clearRect | React StrictMode 이중 마운트 회피, 프레임 간 알파 보존 |
 | gif 재생 | ImageDecoder API + IPC 파일 읽기 | fetch가 커스텀 프로토콜 미지원, 정확한 1회 재생 |
-| 로컬 파일 접근 | media:// 커스텀 프로토콜 + readFileSync + Range 지원 | 보안(allowedMediaPaths) + 비디오 스트리밍 |
+| 미디어 관리 | 앱 내 복사(userData/media/) + 레지스트리 | 원본 삭제/이동에 안전, 중복 방지 |
+| 로컬 파일 접근 | media:// 커스텀 프로토콜 + mediaDir 기반 경로 검증 | 앱 내 미디어 디렉토리만 허용 |
+| 타이머 창 상태 | window-state.json에 위치/크기/숨기기 저장 | 디바운싱(300ms), 모니터 영역 보정 |
+| 시스템 트레이 | 뽀모도로 실행 중에만 트레이 아이콘 활성화 | 타이머 표시/숨기기 토글, 설정, 종료 |
 | 타이머 정확도 | Date.now() 기반, backgroundThrottling: false | 시스템 슬립/백그라운드 대응 |
 | 배포 형태 | zip (NSIS 아님) | 코드 서명 없는 상태에서 SmartScreen 허들 최소화 |
 | 아이콘 변환 | png-to-ico로 멀티사이즈 ico 생성 | electron-builder는 멀티사이즈 ico 미생성 |
@@ -230,3 +238,4 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 | 2026-05-15 | 워크플로우에 [9] 문서 갱신 단계 추가. 기존 권장 리뷰 기준(A1~A4)을 필수(R6~R9)로 격상. 에이전트 프롬프트에 문서 경로 명시 원칙 추가. |
 | 2026-05-15 | Phase 0~3 완료 반영. 기술 결정 사항, 완료 작업 이력, Phase 4 계획 추가. |
 | 2026-05-15 | v0.1.0 릴리즈 완료. 디버깅 프로세스[8-1] 워크플로우에 추가. 빌드/배포 기술 결정 추가. |
+| 2026-05-16 | Phase 5 완료. 미디어 앱 내 저장, 투명 영상 창, 타이머 숨기기/트레이, 창 상태 기억. 기술 결정 갱신. |
