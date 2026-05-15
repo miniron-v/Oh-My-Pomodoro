@@ -1,7 +1,7 @@
 import { protocol } from 'electron'
-import { getAllowedMediaPaths } from '../ipc/handlers'
+import { getMediaDir } from '../store/mediaStore'
 import { readFileSync, statSync } from 'fs'
-import { extname } from 'path'
+import { extname, resolve, normalize } from 'path'
 
 const MIME_TYPES: Record<string, string> = {
   '.mp4': 'video/mp4',
@@ -14,9 +14,10 @@ const MIME_TYPES: Record<string, string> = {
 export function registerMediaProtocol(): void {
   protocol.handle('media', (request) => {
     const url = new URL(request.url)
-    const filePath = decodeURIComponent(url.pathname).replace(/^\/+/, '')
+    const filePath = resolve(decodeURIComponent(url.pathname).replace(/^\/+/, ''))
+    const mediaBase = normalize(getMediaDir())
 
-    if (!getAllowedMediaPaths().has(filePath)) {
+    if (!normalize(filePath).startsWith(mediaBase)) {
       return new Response('Forbidden', { status: 403 })
     }
 

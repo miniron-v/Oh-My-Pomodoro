@@ -1,26 +1,47 @@
 import { app, ipcMain, Menu, globalShortcut } from 'electron'
+import { existsSync } from 'fs'
 import { IPC_CHANNELS } from '../shared/types'
 import { createSettingsWindow, hideSettingsWindow, showSettingsWindow } from './windows/settingsWindow'
 import { createTimerWindow, destroyTimerWindow, getTimerWindow } from './windows/timerWindow'
 import { createVideoWindow, destroyVideoWindow } from './windows/videoWindow'
-import { registerIpcHandlers, addAllowedMediaPath } from './ipc/handlers'
+import { registerIpcHandlers } from './ipc/handlers'
 import { registerMediaProtocol } from './protocol/mediaProtocol'
 import { startPomodoro, stopPomodoro, pausePomodoro, resumePomodoro, handleVideoEnded, handleVideoSkip } from './timer/PomodoroEngine'
-import { getSettings } from './store/settingsStore'
+import { getSettings, setSettings } from './store/settingsStore'
+import { addMedia } from './store/mediaStore'
 
-function restoreAllowedMediaPaths(): void {
-  const settings = getSettings()
-  if (settings.startVideoSource && !settings.startVideoSource.startsWith('http')) {
-    addAllowedMediaPath(settings.startVideoSource)
+function migrateOldMediaPaths(): void {
+  const settings = getSettings() as Record<string, unknown>
+  const oldStart = settings['startVideoSource'] as string | null | undefined
+  const oldEnd = settings['endVideoSource'] as string | null | undefined
+  if (oldStart === undefined && oldEnd === undefined) return
+
+  let newStartId = settings['startMediaId'] as string | null ?? null
+  let newEndId = settings['endMediaId'] as string | null ?? null
+
+  if (oldStart && typeof oldStart === 'string' && !oldStart.startsWith('http') && existsSync(oldStart)) {
+    const entry = addMedia(oldStart)
+    if (entry) newStartId = entry.id
   }
-  if (settings.endVideoSource && !settings.endVideoSource.startsWith('http')) {
-    addAllowedMediaPath(settings.endVideoSource)
+  if (oldEnd && typeof oldEnd === 'string' && !oldEnd.startsWith('http') && existsSync(oldEnd)) {
+    const entry = addMedia(oldEnd)
+    if (entry) newEndId = entry.id
   }
+
+  setSettings({
+    workMinutes: settings['workMinutes'] as number ?? 25,
+    shortBreakMinutes: settings['shortBreakMinutes'] as number ?? 5,
+    longBreakMinutes: settings['longBreakMinutes'] as number ?? 15,
+    longBreakInterval: settings['longBreakInterval'] as number ?? 4,
+    startMediaId: newStartId,
+    endMediaId: newEndId,
+    soundMode: (settings['soundMode'] as 'video' | 'alarm') ?? 'video'
+  })
 }
 
 app.whenReady().then(() => {
   registerMediaProtocol()
-  restoreAllowedMediaPaths()
+  migrateOldMediaPaths()
 
   Menu.setApplicationMenu(null)
 

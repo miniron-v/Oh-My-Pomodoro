@@ -1,6 +1,7 @@
 export {
   type TimerPhase,
   type TimerState,
+  type MediaEntry,
   type AppSettings,
   DEFAULT_SETTINGS,
   IPC_CHANNELS,
