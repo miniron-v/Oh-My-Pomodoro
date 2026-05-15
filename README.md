@@ -1,8 +1,12 @@
 # Oh-My-Pomodoro
 
+<img width="800" height="450" alt="image" src="https://github.com/user-attachments/assets/d4578f3a-cd00-445f-8a02-a09abe3cd2cc" />
+
 원하는 gif, 영상을 넣어 만드는 전체화면 뽀모도로 데스크톱 앱
 
 ## 주요 기능
+
+<img width="591" height="506" alt="image" src="https://github.com/user-attachments/assets/ca61e106-0aad-4a83-bd76-8686265994e3" />
 
 - **뽀모도로 타이머** — 작업 / 짧은 휴식 / 긴 휴식 자동 사이클
 - **전체화면 미디어 재생** — 작업↔휴식 전환 시 사용자가 선택한 gif 또는 mp4를 전체화면으로 재생
@@ -10,10 +14,6 @@
 - **일시정지 / 재개 / 정지** — 타이머 제어
 - **ESC 스킵** — 영상 재생 중 ESC로 즉시 스킵
 - **설정** — 작업/휴식 시간, 시작/종료 영상, 알림음 모드 설정
-
-## 데모
-
-<!-- 여기에 앱 시연 gif 또는 mp4를 추가해주세요 -->
 
 ## 다운로드
 
