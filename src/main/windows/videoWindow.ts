@@ -49,6 +49,7 @@ export function showVideoWindow(): void {
   if (videoWindow) {
     videoWindow.setIgnoreMouseEvents(false)
     videoWindow.setOpacity(1)
+    videoWindow.setFullScreen(true)
     videoWindow.show()
     videoWindow.focus()
     videoWindow.setAlwaysOnTop(true, 'screen-saver')
@@ -57,6 +58,7 @@ export function showVideoWindow(): void {
 
 export function hideVideoWindow(): void {
   if (videoWindow) {
+    videoWindow.setFullScreen(false)
     videoWindow.setOpacity(0)
     videoWindow.setIgnoreMouseEvents(true)
   }

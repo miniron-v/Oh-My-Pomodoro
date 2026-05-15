@@ -133,7 +133,7 @@ function GifPlayer({
 
           const fw = frame.displayWidth
           const fh = frame.displayHeight
-          const scale = Math.max(cw / fw, ch / fh)
+          const scale = Math.min(cw / fw, ch / fh)
           const dw = fw * scale
           const dh = fh * scale
           const dx = (cw - dw) / 2
@@ -218,7 +218,7 @@ function VideoPlayer({
 
         const vw = video.videoWidth
         const vh = video.videoHeight
-        const scale = Math.max(cw / vw, ch / vh)
+        const scale = Math.min(cw / vw, ch / vh)
         const dw = vw * scale
         const dh = vh * scale
         const dx = (cw - dw) / 2
