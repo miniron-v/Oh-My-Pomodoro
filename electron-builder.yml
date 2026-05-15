@@ -6,10 +6,20 @@ directories:
 files:
   - out/**/*
   - resources/**/*
+  - "!**/*.md"
+  - "!**/CLAUDE.md"
+  - "!**/TEAM_LEAD.md"
+  - "!**/PLANNER.md"
+  - "!**/LICENSE"
+  - "!**/.gitkeep"
 extraResources:
   - from: resources/sounds
     to: sounds
+    filter:
+      - "**/*"
+      - "!.gitkeep"
 win:
   target:
-    - nsis
-  icon: resources/icon.ico
+    - zip
+  icon: resources/icon.png
+forceCodeSigning: false
