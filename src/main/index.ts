@@ -1,4 +1,4 @@
-import { app, ipcMain, Menu } from 'electron'
+import { app, ipcMain, Menu, globalShortcut } from 'electron'
 import { IPC_CHANNELS } from '../shared/types'
 import { createSettingsWindow, hideSettingsWindow, showSettingsWindow } from './windows/settingsWindow'
 import { createTimerWindow, destroyTimerWindow, getTimerWindow } from './windows/timerWindow'
@@ -22,26 +22,21 @@ app.whenReady().then(() => {
   registerMediaProtocol()
   restoreAllowedMediaPaths()
 
-  const menu = Menu.buildFromTemplate([
-    {
-      label: '개발',
-      submenu: [
-        {
-          label: '개발자 도구 열기',
-          accelerator: 'F12',
-          click: (_item, win) => {
-            if (win?.webContents.isDevToolsOpened()) {
-              win.webContents.closeDevTools()
-            } else {
-              win?.webContents.openDevTools({ mode: 'detach' })
-            }
-          }
-        },
-        { role: 'reload', label: '새로고침' }
-      ]
-    }
-  ])
-  Menu.setApplicationMenu(menu)
+  Menu.setApplicationMenu(null)
+
+  app.on('browser-window-focus', (_event, win) => {
+    globalShortcut.register('F12', () => {
+      if (win.webContents.isDevToolsOpened()) {
+        win.webContents.closeDevTools()
+      } else {
+        win.webContents.openDevTools({ mode: 'detach' })
+      }
+    })
+  })
+
+  app.on('browser-window-blur', () => {
+    globalShortcut.unregister('F12')
+  })
 
   const settingsWindow = createSettingsWindow()
   registerIpcHandlers(settingsWindow)
