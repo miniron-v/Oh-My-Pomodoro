@@ -6,7 +6,7 @@ export default defineConfig({
     build: {
       outDir: 'out/main',
       rollupOptions: {
-        external: ['electron-store']
+        external: []
       }
     }
   },

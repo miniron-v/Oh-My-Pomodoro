@@ -19,7 +19,7 @@ export function createTimerWindow(): BrowserWindow {
     hasShadow: false,
     backgroundColor: '#00000000',
     webPreferences: {
-      preload: join(import.meta.dirname, '../../preload/index.mjs'),
+      preload: join(import.meta.dirname, '../preload/index.mjs'),
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: false
@@ -29,7 +29,7 @@ export function createTimerWindow(): BrowserWindow {
   if (process.env.ELECTRON_RENDERER_URL) {
     timerWindow.loadURL(`${process.env.ELECTRON_RENDERER_URL}#/timer`)
   } else {
-    timerWindow.loadFile(join(import.meta.dirname, '../../renderer/index.html'), {
+    timerWindow.loadFile(join(import.meta.dirname, '../renderer/index.html'), {
       hash: '/timer'
     })
   }

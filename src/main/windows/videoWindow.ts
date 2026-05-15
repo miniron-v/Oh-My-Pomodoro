@@ -19,7 +19,7 @@ export function createVideoWindow(): BrowserWindow {
     show: false,
     skipTaskbar: true,
     webPreferences: {
-      preload: join(import.meta.dirname, '../../preload/index.mjs'),
+      preload: join(import.meta.dirname, '../preload/index.mjs'),
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: false
@@ -29,7 +29,7 @@ export function createVideoWindow(): BrowserWindow {
   if (process.env.ELECTRON_RENDERER_URL) {
     videoWindow.loadURL(`${process.env.ELECTRON_RENDERER_URL}#/video`)
   } else {
-    videoWindow.loadFile(join(import.meta.dirname, '../../renderer/index.html'), {
+    videoWindow.loadFile(join(import.meta.dirname, '../renderer/index.html'), {
       hash: '/video'
     })
   }

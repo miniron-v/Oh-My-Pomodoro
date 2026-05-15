@@ -9,7 +9,7 @@ export function createSettingsWindow(): BrowserWindow {
     height: 680,
     resizable: true,
     webPreferences: {
-      preload: join(import.meta.dirname, '../../preload/index.mjs'),
+      preload: join(import.meta.dirname, '../preload/index.mjs'),
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: false
@@ -19,7 +19,7 @@ export function createSettingsWindow(): BrowserWindow {
   if (process.env.ELECTRON_RENDERER_URL) {
     settingsWindow.loadURL(`${process.env.ELECTRON_RENDERER_URL}#/settings`)
   } else {
-    settingsWindow.loadFile(join(import.meta.dirname, '../../renderer/index.html'), {
+    settingsWindow.loadFile(join(import.meta.dirname, '../renderer/index.html'), {
       hash: '/settings'
     })
   }

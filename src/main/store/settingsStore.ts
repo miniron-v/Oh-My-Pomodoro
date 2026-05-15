@@ -1,55 +1,51 @@
-import Store from 'electron-store'
+import { app } from 'electron'
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs'
+import { join } from 'path'
 import { type AppSettings, DEFAULT_SETTINGS } from '../../shared/types'
 
-const store = new Store<AppSettings>({
-  name: 'settings',
-  defaults: DEFAULT_SETTINGS,
-  schema: {
-    workMinutes: {
-      type: 'number',
-      minimum: 1,
-      maximum: 120
-    },
-    shortBreakMinutes: {
-      type: 'number',
-      minimum: 1,
-      maximum: 60
-    },
-    longBreakMinutes: {
-      type: 'number',
-      minimum: 1,
-      maximum: 60
-    },
-    longBreakInterval: {
-      type: 'number',
-      minimum: 1,
-      maximum: 10
-    },
-    startVideoSource: {
-      type: ['string', 'null']
-    },
-    endVideoSource: {
-      type: ['string', 'null']
-    },
-    soundMode: {
-      type: 'string',
-      enum: ['video', 'alarm']
-    }
-  }
-})
+let settingsPath = ''
+let cache: AppSettings | null = null
 
-export function getSettings(): AppSettings {
-  return {
-    workMinutes: store.get('workMinutes'),
-    shortBreakMinutes: store.get('shortBreakMinutes'),
-    longBreakMinutes: store.get('longBreakMinutes'),
-    longBreakInterval: store.get('longBreakInterval'),
-    startVideoSource: store.get('startVideoSource'),
-    endVideoSource: store.get('endVideoSource'),
-    soundMode: store.get('soundMode')
+function ensurePath(): void {
+  if (settingsPath) return
+  const userDataPath = app.getPath('userData')
+  if (!existsSync(userDataPath)) {
+    mkdirSync(userDataPath, { recursive: true })
+  }
+  settingsPath = join(userDataPath, 'settings.json')
+}
+
+function load(): AppSettings {
+  ensurePath()
+  if (cache) return cache
+
+  if (!existsSync(settingsPath)) {
+    cache = { ...DEFAULT_SETTINGS }
+    save(cache)
+    return cache
+  }
+
+  try {
+    const raw = readFileSync(settingsPath, 'utf-8')
+    const parsed = JSON.parse(raw) as Partial<AppSettings>
+    cache = { ...DEFAULT_SETTINGS, ...parsed }
+    return cache
+  } catch {
+    cache = { ...DEFAULT_SETTINGS }
+    return cache
   }
 }
 
+function save(settings: AppSettings): void {
+  ensurePath()
+  cache = settings
+  writeFileSync(settingsPath, JSON.stringify(settings, null, 2), 'utf-8')
+}
+
+export function getSettings(): AppSettings {
+  return load()
+}
+
 export function setSettings(settings: AppSettings): void {
-  store.set(settings)
+  save(settings)
 }
