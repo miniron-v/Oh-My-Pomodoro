@@ -4,38 +4,80 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 3.5vw;
   background: transparent;
   -webkit-app-region: drag;
   cursor: move;
 }
 
 .timer-phase {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 6.5vw;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
   white-space: nowrap;
 }
 
 .time-display {
   font-family: 'Consolas', 'Courier New', monospace;
-  font-size: 28px;
+  font-size: 10vw;
   font-weight: 700;
   color: #fff;
-  text-shadow: 0 0 8px rgba(74, 158, 255, 0.6);
+  text-shadow: 0 0 0.5vw rgba(74, 158, 255, 0.6);
   white-space: nowrap;
 }
 
-.timer-stop {
+.timer-controls {
+  display: flex;
+  align-items: center;
+  gap: 1vw;
   -webkit-app-region: no-drag;
-  background: none;
-  border: none;
-  color: rgba(255, 100, 100, 0.8);
-  font-size: 14px;
-  cursor: pointer;
-  padding: 2px 4px;
-  line-height: 1;
 }
 
-.timer-stop:hover {
-  color: rgba(255, 100, 100, 1);
+.timer-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  width: 7vw;
+  height: 7vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-pause {
+  width: 5.5vw;
+  height: 6vw;
+  border-left: 2vw solid rgba(255, 255, 255, 0.8);
+  border-right: 2vw solid rgba(255, 255, 255, 0.8);
+  border-top: none;
+  border-bottom: none;
+  box-sizing: border-box;
+}
+
+.timer-pause-resume:hover .icon-pause {
+  border-left-color: rgba(255, 255, 255, 1);
+  border-right-color: rgba(255, 255, 255, 1);
+}
+
+.icon-play {
+  width: 0;
+  height: 0;
+  border-top: 3vw solid transparent;
+  border-bottom: 3vw solid transparent;
+  border-left: 5vw solid rgba(255, 255, 255, 0.8);
+}
+
+.timer-pause-resume:hover .icon-play {
+  border-left-color: rgba(255, 255, 255, 1);
+}
+
+.icon-stop {
+  width: 5.5vw;
+  height: 5.5vw;
+  background: rgba(255, 100, 100, 0.8);
+}
+
+.timer-stop:hover .icon-stop {
+  background: rgba(255, 100, 100, 1);
 }

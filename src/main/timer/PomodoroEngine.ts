@@ -23,6 +23,7 @@ let state: EngineState = {
 let tickTimer: ReturnType<typeof setInterval> | null = null
 let targetEndTime: number | null = null
 let mediaTimer: ReturnType<typeof setTimeout> | null = null
+let paused = false
 
 function broadcastTick(): void {
   const timerWin = getTimerWindow()
@@ -35,6 +36,13 @@ function broadcastPhaseChange(): void {
   const timerWin = getTimerWindow()
   if (timerWin && !timerWin.isDestroyed()) {
     timerWin.webContents.send(IPC_CHANNELS.TIMER_PHASE_CHANGE, state.phase)
+  }
+}
+
+function broadcastPaused(): void {
+  const timerWin = getTimerWindow()
+  if (timerWin && !timerWin.isDestroyed()) {
+    timerWin.webContents.send(IPC_CHANNELS.TIMER_PAUSED, paused)
   }
 }
 
@@ -142,6 +150,7 @@ function onVideoComplete(): void {
 
 export function startPomodoro(): void {
   const settings = getSettings()
+  paused = false
   state = {
     phase: 'work',
     remainingSeconds: 0,
@@ -149,6 +158,7 @@ export function startPomodoro(): void {
     nextPhaseAfterVideo: null
   }
   broadcastPhaseChange()
+  broadcastPaused()
   startCountdown(getPhaseSeconds('work', settings))
 }
 
@@ -156,6 +166,7 @@ export function stopPomodoro(): void {
   stopCountdown()
   clearMediaTimer()
   hideVideoWindow()
+  paused = false
   state = {
     phase: 'idle',
     remainingSeconds: 0,
@@ -163,6 +174,21 @@ export function stopPomodoro(): void {
     nextPhaseAfterVideo: null
   }
   broadcastPhaseChange()
+  broadcastPaused()
+}
+
+export function pausePomodoro(): void {
+  if (paused || state.phase === 'idle' || state.phase === 'video-playing') return
+  paused = true
+  stopCountdown()
+  broadcastPaused()
+}
+
+export function resumePomodoro(): void {
+  if (!paused || state.phase === 'idle' || state.phase === 'video-playing') return
+  paused = false
+  startCountdown(state.remainingSeconds)
+  broadcastPaused()
 }
 
 export function handleVideoEnded(): void {

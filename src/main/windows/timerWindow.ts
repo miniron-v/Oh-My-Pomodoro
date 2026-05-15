@@ -5,9 +5,13 @@ let timerWindow: BrowserWindow | null = null
 
 export function createTimerWindow(): BrowserWindow {
   timerWindow = new BrowserWindow({
-    width: 200,
-    height: 70,
-    resizable: false,
+    width: 280,
+    height: 56,
+    minWidth: 100,
+    minHeight: 24,
+    maxWidth: 560,
+    maxHeight: 112,
+    resizable: true,
     minimizable: false,
     maximizable: false,
     closable: false,

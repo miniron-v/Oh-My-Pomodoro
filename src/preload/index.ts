@@ -13,6 +13,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   startTimer: () => ipcRenderer.send(IPC_CHANNELS.TIMER_START),
   stopTimer: () => ipcRenderer.send(IPC_CHANNELS.TIMER_STOP),
+  pauseTimer: () => ipcRenderer.send(IPC_CHANNELS.TIMER_PAUSE),
+  resumeTimer: () => ipcRenderer.send(IPC_CHANNELS.TIMER_RESUME),
 
   onTick: (callback: (remainingSeconds: number) => void) => {
     ipcRenderer.on(IPC_CHANNELS.TIMER_TICK, (_event, remainingSeconds) =>
@@ -21,6 +23,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
   },
   onPhaseChange: (callback: (phase: string) => void) => {
     ipcRenderer.on(IPC_CHANNELS.TIMER_PHASE_CHANGE, (_event, phase) => callback(phase))
+  },
+  onPaused: (callback: (paused: boolean) => void) => {
+    ipcRenderer.on(IPC_CHANNELS.TIMER_PAUSED, (_event, paused) => callback(paused))
   },
 
   onPlayVideo: (callback: (source: string, soundMode: string) => void) => {

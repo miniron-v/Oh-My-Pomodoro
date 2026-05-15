@@ -5,7 +5,7 @@ import { createTimerWindow, destroyTimerWindow, getTimerWindow } from './windows
 import { createVideoWindow, destroyVideoWindow } from './windows/videoWindow'
 import { registerIpcHandlers, addAllowedMediaPath } from './ipc/handlers'
 import { registerMediaProtocol } from './protocol/mediaProtocol'
-import { startPomodoro, stopPomodoro, handleVideoEnded, handleVideoSkip } from './timer/PomodoroEngine'
+import { startPomodoro, stopPomodoro, pausePomodoro, resumePomodoro, handleVideoEnded, handleVideoSkip } from './timer/PomodoroEngine'
 import { getSettings } from './store/settingsStore'
 
 function restoreAllowedMediaPaths(): void {
@@ -58,6 +58,14 @@ app.whenReady().then(() => {
     destroyTimerWindow()
     destroyVideoWindow()
     showSettingsWindow()
+  })
+
+  ipcMain.on(IPC_CHANNELS.TIMER_PAUSE, () => {
+    pausePomodoro()
+  })
+
+  ipcMain.on(IPC_CHANNELS.TIMER_RESUME, () => {
+    resumePomodoro()
   })
 
   ipcMain.on(IPC_CHANNELS.VIDEO_ENDED, () => {

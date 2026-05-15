@@ -30,8 +30,11 @@ export const DEFAULT_SETTINGS: AppSettings = {
 export const IPC_CHANNELS = {
   TIMER_START: 'timer:start',
   TIMER_STOP: 'timer:stop',
+  TIMER_PAUSE: 'timer:pause',
+  TIMER_RESUME: 'timer:resume',
   TIMER_TICK: 'timer:tick',
   TIMER_PHASE_CHANGE: 'timer:phase-change',
+  TIMER_PAUSED: 'timer:paused',
   VIDEO_PLAY: 'video:play',
   VIDEO_ENDED: 'video:ended',
   VIDEO_SKIP: 'video:skip',
@@ -52,9 +55,12 @@ export interface ElectronAPI {
 
   startTimer: () => void
   stopTimer: () => void
+  pauseTimer: () => void
+  resumeTimer: () => void
 
   onTick: (callback: (remainingSeconds: number) => void) => void
   onPhaseChange: (callback: (phase: TimerPhase) => void) => void
+  onPaused: (callback: (paused: boolean) => void) => void
 
   onPlayVideo: (callback: (source: string, soundMode: string) => void) => void
   notifyVideoEnded: () => void
