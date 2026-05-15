@@ -96,3 +96,16 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 | `develop` | 개발 통합 브랜치. 기능 브랜치 머지 대상. |
 | `feature/<작업명>` | 개별 기능 개발 브랜치. |
 | `fix/<이슈명>` | 버그 수정 브랜치. |
+
+### 브랜치 보호 규칙
+
+`main`과 `develop` 브랜치에는 GitHub Rulesets가 적용되어 있다.
+
+- 직접 push 차단 — 반드시 PR을 통해서만 변경한다.
+- PR 리뷰 1명 승인 필수 — 리포지토리 오너가 승인해야 머지 가능하다.
+- Force push 금지.
+- 브랜치 삭제 금지.
+- 새 커밋 push 시 기존 리뷰 승인 자동 해제.
+- 리뷰 스레드 해결 필수.
+
+에이전트(Claude)는 `feature/*` / `fix/*` 브랜치에 커밋 후 PR을 생성하는 것까지만 수행한다. 머지는 사용자가 리뷰 승인 후 직접 수행한다.
