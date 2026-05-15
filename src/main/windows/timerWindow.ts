@@ -51,6 +51,23 @@ export function getTimerWindow(): BrowserWindow | null {
   return timerWindow
 }
 
+export function hideTimerWindow(): void {
+  if (timerWindow) {
+    timerWindow.hide()
+  }
+}
+
+export function showTimerWindow(): void {
+  if (timerWindow) {
+    timerWindow.show()
+    timerWindow.setAlwaysOnTop(true)
+  }
+}
+
+export function isTimerWindowVisible(): boolean {
+  return timerWindow !== null && timerWindow.isVisible()
+}
+
 export function destroyTimerWindow(): void {
   if (timerWindow) {
     timerWindow.destroy()

@@ -51,7 +51,9 @@ export const IPC_CHANNELS = {
   MEDIA_LIST: 'media:list',
   MEDIA_ADD: 'media:add',
   MEDIA_REMOVE: 'media:remove',
-  MEDIA_GET_PATH: 'media:get-path'
+  MEDIA_GET_PATH: 'media:get-path',
+  TIMER_HIDE: 'timer:hide',
+  TIMER_SHOW: 'timer:show'
 } as const
 
 export type IpcChannel = (typeof IPC_CHANNELS)[keyof typeof IPC_CHANNELS]
@@ -71,6 +73,8 @@ export interface ElectronAPI {
   stopTimer: () => void
   pauseTimer: () => void
   resumeTimer: () => void
+  hideTimer: () => void
+  showTimer: () => void
 
   onTick: (callback: (remainingSeconds: number) => void) => void
   onPhaseChange: (callback: (phase: TimerPhase) => void) => void
