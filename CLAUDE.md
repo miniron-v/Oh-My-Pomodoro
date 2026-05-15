@@ -79,6 +79,15 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 
 ---
 
+## 디버깅 규칙
+
+- 추측으로 코드를 수정하지 않는다.
+- 반드시 로그(console.log, DevTools 등)를 추가하여 원인을 확정한 후 수정한다.
+- 한 번에 여러 가설을 동시에 수정하지 않는다.
+- 커밋 전 모든 디버그 코드(console.log, openDevTools 등)를 제거한다.
+
+---
+
 ## 브랜치 전략
 
 | 브랜치 | 용도 |
