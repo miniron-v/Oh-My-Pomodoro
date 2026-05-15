@@ -15,14 +15,14 @@ export function createTimerWindow(): BrowserWindow {
     frame: false,
     transparent: true,
     skipTaskbar: true,
-    focusable: false,
     hasShadow: false,
     backgroundColor: '#00000000',
     webPreferences: {
       preload: join(import.meta.dirname, '../preload/index.mjs'),
       contextIsolation: true,
       nodeIntegration: false,
-      sandbox: false
+      sandbox: false,
+      backgroundThrottling: false
     }
   })
 
@@ -33,6 +33,8 @@ export function createTimerWindow(): BrowserWindow {
       hash: '/timer'
     })
   }
+
+  timerWindow.webContents.setBackgroundThrottling(false)
 
   timerWindow.on('closed', () => {
     timerWindow = null

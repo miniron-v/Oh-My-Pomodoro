@@ -48,6 +48,7 @@ export function getVideoWindow(): BrowserWindow | null {
 export function showVideoWindow(): void {
   if (videoWindow) {
     videoWindow.show()
+    videoWindow.focus()
     videoWindow.setAlwaysOnTop(true, 'screen-saver')
   }
 }

@@ -9,6 +9,10 @@ export function getAllowedMediaPaths(): ReadonlySet<string> {
   return allowedMediaPaths
 }
 
+export function addAllowedMediaPath(path: string): void {
+  allowedMediaPaths.add(path)
+}
+
 function isValidSettings(value: unknown): value is AppSettings {
   if (typeof value !== 'object' || value === null) return false
   const s = value as Record<string, unknown>
