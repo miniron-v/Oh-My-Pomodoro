@@ -37,7 +37,8 @@ export const IPC_CHANNELS = {
   VIDEO_SKIP: 'video:skip',
   SETTINGS_GET: 'settings:get',
   SETTINGS_SET: 'settings:set',
-  SETTINGS_SELECT_FILE: 'settings:select-file'
+  SETTINGS_SELECT_FILE: 'settings:select-file',
+  MEDIA_READ_FILE: 'media:read-file'
 } as const
 
 export type IpcChannel = (typeof IPC_CHANNELS)[keyof typeof IPC_CHANNELS]
@@ -58,6 +59,7 @@ export interface ElectronAPI {
   onPlayVideo: (callback: (source: string, soundMode: string) => void) => void
   notifyVideoEnded: () => void
   notifyVideoSkip: () => void
+  readMediaFile: (source: string) => Promise<ArrayBuffer>
 
   removeAllListeners: (channel: IpcChannel) => void
 }

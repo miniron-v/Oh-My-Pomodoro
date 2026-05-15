@@ -1,4 +1,5 @@
 import { ipcMain, dialog, type BrowserWindow } from 'electron'
+import { readFileSync } from 'fs'
 import { IPC_CHANNELS } from '../../shared/types'
 import { getSettings, setSettings } from '../store/settingsStore'
 import type { AppSettings } from '../../shared/types'
@@ -54,6 +55,14 @@ export function registerIpcHandlers(_settingsWindow: BrowserWindow): void {
       throw new Error('Unauthorized media source: endVideoSource')
     }
     setSettings(settings)
+  })
+
+  ipcMain.handle(IPC_CHANNELS.MEDIA_READ_FILE, (_event, source: string) => {
+    if (!allowedMediaPaths.has(source)) {
+      throw new Error('Unauthorized media path')
+    }
+    const data = readFileSync(source)
+    return data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength)
   })
 
   ipcMain.handle(

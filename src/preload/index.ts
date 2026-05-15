@@ -30,6 +30,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   },
   notifyVideoEnded: () => ipcRenderer.send(IPC_CHANNELS.VIDEO_ENDED),
   notifyVideoSkip: () => ipcRenderer.send(IPC_CHANNELS.VIDEO_SKIP),
+  readMediaFile: (source: string) => ipcRenderer.invoke(IPC_CHANNELS.MEDIA_READ_FILE, source),
 
   removeAllListeners: (channel: string) => {
     if (isAllowedChannel(channel)) {
