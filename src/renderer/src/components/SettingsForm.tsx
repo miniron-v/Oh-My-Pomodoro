@@ -140,8 +140,8 @@ export default function SettingsForm({
             <h2>미디어 설정</h2>
             <p className="settings-hint">미디어는 최대 5초간 재생됩니다. ESC로 스킵할 수 있습니다.</p>
 
-            {renderMediaSelect('시작 영상 (휴식 → 작업)', 'startMediaId')}
             {renderMediaSelect('종료 영상 (작업 → 휴식)', 'endMediaId')}
+            {renderMediaSelect('시작 영상 (휴식 → 작업)', 'startMediaId')}
           </section>
 
           <section className="settings-section">
