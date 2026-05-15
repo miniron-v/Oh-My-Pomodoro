@@ -15,8 +15,14 @@
 }
 
 .settings-form {
-  max-width: 460px;
+  max-width: 900px;
   margin: 0 auto;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0 32px;
 }
 
 .settings-title {
@@ -32,11 +38,11 @@
 }
 
 .settings-section h2 {
-  font-size: 16px;
-  font-weight: 600;
-  color: #ccc;
-  margin-bottom: 12px;
-  padding-bottom: 6px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #eee;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
   border-bottom: 1px solid #333;
 }
 
@@ -148,4 +154,10 @@
 
 .start-button:hover {
   background: #3a8eef;
+}
+
+@media (min-width: 640px) {
+  .settings-grid {
+    grid-template-columns: 1fr 1fr;
+  }
 }

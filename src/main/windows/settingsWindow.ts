@@ -5,8 +5,10 @@ let settingsWindow: BrowserWindow | null = null
 
 export function createSettingsWindow(): BrowserWindow {
   settingsWindow = new BrowserWindow({
-    width: 520,
+    width: 800,
     height: 680,
+    minWidth: 360,
+    minHeight: 500,
     resizable: true,
     webPreferences: {
       preload: join(import.meta.dirname, '../preload/index.mjs'),
