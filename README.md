@@ -1,6 +1,6 @@
 # Oh-My-Pomodoro
 
-<img width="800" height="450" alt="image" src="https://github.com/user-attachments/assets/d4578f3a-cd00-445f-8a02-a09abe3cd2cc" />
+https://github.com/user-attachments/assets/80eb0a52-1130-4c39-8acc-c40abd7931cd
 
 원하는 gif, 영상을 넣어 만드는 전체화면 뽀모도로 데스크톱 앱
 
