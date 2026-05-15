@@ -144,8 +144,6 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 
 ## 5. 에이전트 할당 계획
 
-> 기획서 확정 후 작성 예정
-
 에이전트 할당 시 고려 사항:
 - 각 에이전트는 하나의 독립된 작업 단위를 담당한다.
 - 의존성이 없는 작업은 병렬로 할당한다.
@@ -157,7 +155,6 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 - 각 주요 디렉토리(모듈/기능 단위)에 해당 영역의 설계와 규칙을 담은 문서를 배치한다.
 - 에이전트 할당 시, 프롬프트에 **해당 작업에 필요한 문서 경로만 명시적으로 포함**한다.
 - 에이전트가 불필요한 문서를 읽지 않도록, 전체 문서 목록이 아닌 관련 문서만 지정한다.
-- 문서 경로 예시: `docs/timer/DESIGN.md`, `docs/api/SPEC.md` 등 (기획서 확정 후 구체화)
 
 **프롬프트 작성 템플릿:**
 ```
@@ -168,16 +165,44 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 - 제약 조건: ...
 ```
 
+### 5.2 완료된 작업 이력
+
+| Phase | 작업 | 브랜치 | 상태 |
+|---|---|---|---|
+| 0 | 프로젝트 스캐폴딩, 공유 타입 정의 | `feature/core-features` | 완료 |
+| 1 | IPC 골격, 설정 저장소, 창 관리 모듈 | `feature/core-features` | 완료 |
+| 2 | 뽀모도로 엔진, 설정 UI, 미니 타이머 UI | `feature/core-features` | 완료 |
+| 3 | 영상/gif 재생, media:// 프로토콜, 전체 통합 | `feature/core-features` | 완료 |
+
 ---
 
 ## 6. 현재 상태
 
 | 항목 | 상태 |
 |---|---|
-| 기획서 | **미수신** — 사용자 전달 대기 중 |
-| 작업 계획 | 미작성 |
-| 에이전트 할당 | 미진행 |
-| 현재 단계 | **[1] 기획 확인 대기** |
+| 기획서 | 확정 (`docs/SPEC.md`) |
+| 작업 계획 | Phase 0~3 완료, Phase 4 진행 예정 |
+| 현재 브랜치 | `feature/core-features` |
+| 현재 단계 | **Phase 4 — 알림음 리소스 추가, 최종 통합 테스트** |
+
+### Phase 4 남은 작업
+
+| Task | 내용 | 상태 |
+|---|---|---|
+| 4-1 | 내장 알림음 리소스 추가 | 미진행 |
+| 4-3 | 최종 통합 테스트 및 버그 수정 | 미진행 |
+
+### 기술 결정 사항 (구현 과정에서 확정)
+
+| 항목 | 결정 | 사유 |
+|---|---|---|
+| 기술 스택 | Electron 42 + React 19 + TypeScript, electron-vite | HMR, main/preload/renderer 분리 빌드 |
+| 창 구조 | 설정 / 미니 타이머 / 전체화면 영상, 3개 분리 | 독립적 생명주기, alwaysOnTop 레벨 분리 |
+| 영상 창 | 불투명(#000), frameless, 모니터 크기 | 투명 창은 Windows에서 hide/show 불가 |
+| 영상 렌더링 | Canvas 기반 (document.createElement video) | React StrictMode 이중 마운트 회피 |
+| gif 재생 | ImageDecoder API + IPC 파일 읽기 | fetch가 커스텀 프로토콜 미지원, 정확한 1회 재생 |
+| 로컬 파일 접근 | media:// 커스텀 프로토콜 + readFileSync + Range 지원 | 보안(allowedMediaPaths) + 비디오 스트리밍 |
+| 타이머 정확도 | Date.now() 기반, backgroundThrottling: false | 시스템 슬립/백그라운드 대응 |
 
 ---
 
@@ -187,3 +212,4 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 |---|---|
 | 2026-05-15 | 최초 작성. 워크플로우, 설계 규칙, 리뷰 기준 정의. |
 | 2026-05-15 | 워크플로우에 [9] 문서 갱신 단계 추가. 기존 권장 리뷰 기준(A1~A4)을 필수(R6~R9)로 격상. 에이전트 프롬프트에 문서 경로 명시 원칙 추가. |
+| 2026-05-15 | Phase 0~3 완료 반영. 기술 결정 사항, 완료 작업 이력, Phase 4 계획 추가. |
