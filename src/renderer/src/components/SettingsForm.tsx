@@ -28,6 +28,10 @@ export default function SettingsForm({
     onSave(updated)
   }
 
+  function handleNumberBlur(e: React.FocusEvent<HTMLInputElement>): void {
+    e.target.value = String(Number(e.target.value))
+  }
+
   async function handleSelectFile(field: 'startVideoSource' | 'endVideoSource'): Promise<void> {
     const path = await window.electronAPI.selectFile(MEDIA_FILTERS)
     if (path) {
@@ -64,6 +68,7 @@ export default function SettingsForm({
             max={120}
             value={settings.workMinutes}
             onChange={(e) => updateField('workMinutes', Number(e.target.value))}
+            onBlur={handleNumberBlur}
           />
         </div>
         <div className="setting-row">
@@ -74,6 +79,7 @@ export default function SettingsForm({
             max={60}
             value={settings.shortBreakMinutes}
             onChange={(e) => updateField('shortBreakMinutes', Number(e.target.value))}
+            onBlur={handleNumberBlur}
           />
         </div>
         <div className="setting-row">
@@ -84,6 +90,7 @@ export default function SettingsForm({
             max={60}
             value={settings.longBreakMinutes}
             onChange={(e) => updateField('longBreakMinutes', Number(e.target.value))}
+            onBlur={handleNumberBlur}
           />
         </div>
         <div className="setting-row">
@@ -94,6 +101,7 @@ export default function SettingsForm({
             max={10}
             value={settings.longBreakInterval}
             onChange={(e) => updateField('longBreakInterval', Number(e.target.value))}
+            onBlur={handleNumberBlur}
           />
         </div>
       </section>
