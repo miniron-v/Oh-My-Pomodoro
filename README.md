@@ -6,7 +6,8 @@
 
 ## 주요 기능
 
-<img width="591" height="506" alt="image" src="https://github.com/user-attachments/assets/ca61e106-0aad-4a83-bd76-8686265994e3" />
+<img width="591" height="506" alt="image" src="https://github.com/user-attachments/assets/36002a87-536b-4959-8fc9-fd6e0b56b696" />
+<img width="591" height="506" alt="image" src="https://github.com/user-attachments/assets/126ea01c-5c43-46e7-8fc9-e0c47dbdf1dc" />
 
 ### 두 가지 모드
 
