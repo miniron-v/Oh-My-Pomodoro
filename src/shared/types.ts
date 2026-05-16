@@ -14,21 +14,29 @@ export interface MediaEntry {
   addedAt: string
 }
 
+export type PomodoroMode = 'timer' | 'alarm'
+
 export interface AppSettings {
+  mode: PomodoroMode
   workMinutes: number
   shortBreakMinutes: number
   longBreakMinutes: number
   longBreakInterval: number
+  alarmWorkMinute: number
+  alarmBreakMinute: number
   startMediaId: string | null
   endMediaId: string | null
   soundMode: 'video' | 'alarm'
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {
+  mode: 'timer',
   workMinutes: 25,
   shortBreakMinutes: 5,
   longBreakMinutes: 15,
   longBreakInterval: 4,
+  alarmWorkMinute: 0,
+  alarmBreakMinute: 50,
   startMediaId: null,
   endMediaId: null,
   soundMode: 'video'

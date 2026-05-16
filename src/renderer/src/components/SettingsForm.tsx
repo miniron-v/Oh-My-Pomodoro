@@ -1,11 +1,19 @@
 import { useState, useEffect } from 'react'
-import type { AppSettings, MediaEntry } from '../types'
+import type { AppSettings, MediaEntry, PomodoroMode } from '../types'
 import MediaDropdown from './MediaDropdown'
 
 interface SettingsFormProps {
   initialSettings: AppSettings
   onSave: (settings: AppSettings) => void
   onStart: () => void
+}
+
+function clampMinute(value: number): number {
+  if (isNaN(value)) return 0
+  const int = Math.floor(value)
+  if (int < 0) return 0
+  if (int > 59) return 59
+  return int
 }
 
 export default function SettingsForm({
@@ -30,8 +38,21 @@ export default function SettingsForm({
     onSave(updated)
   }
 
+  function updateAlarmMinute(field: 'alarmWorkMinute' | 'alarmBreakMinute', raw: number): void {
+    const clamped = clampMinute(raw)
+    const updated = { ...settings, [field]: clamped }
+    setSettings(updated)
+    onSave(updated)
+  }
+
   function handleNumberBlur(e: React.FocusEvent<HTMLInputElement>): void {
     e.target.value = String(Number(e.target.value))
+  }
+
+  function handleAlarmBlur(e: React.FocusEvent<HTMLInputElement>, field: 'alarmWorkMinute' | 'alarmBreakMinute'): void {
+    const clamped = clampMinute(Number(e.target.value))
+    e.target.value = String(clamped)
+    updateAlarmMinute(field, clamped)
   }
 
   async function handleAddMedia(field: 'startMediaId' | 'endMediaId'): Promise<void> {
@@ -88,51 +109,101 @@ export default function SettingsForm({
 
       <div className="settings-grid">
         <section className="settings-section">
-          <h2>타이머 설정</h2>
-          <div className="setting-row">
-            <label>작업 시간 (분)</label>
-            <input
-              type="number"
-              min={1}
-              max={120}
-              value={settings.workMinutes}
-              onChange={(e) => updateField('workMinutes', Number(e.target.value))}
-              onBlur={handleNumberBlur}
-            />
+          <div className="section-header">
+            <h2>타이머 설정</h2>
+            <div className="mode-toggle">
+              <button
+                className={`mode-btn${settings.mode === 'timer' ? ' active' : ''}`}
+                onClick={() => updateField('mode', 'timer' as PomodoroMode)}
+              >
+                타이머
+              </button>
+              <button
+                className={`mode-btn${settings.mode === 'alarm' ? ' active' : ''}`}
+                onClick={() => updateField('mode', 'alarm' as PomodoroMode)}
+              >
+                알람
+              </button>
+            </div>
           </div>
-          <div className="setting-row">
-            <label>짧은 휴식 (분)</label>
-            <input
-              type="number"
-              min={1}
-              max={60}
-              value={settings.shortBreakMinutes}
-              onChange={(e) => updateField('shortBreakMinutes', Number(e.target.value))}
-              onBlur={handleNumberBlur}
-            />
-          </div>
-          <div className="setting-row">
-            <label>긴 휴식 (분)</label>
-            <input
-              type="number"
-              min={1}
-              max={60}
-              value={settings.longBreakMinutes}
-              onChange={(e) => updateField('longBreakMinutes', Number(e.target.value))}
-              onBlur={handleNumberBlur}
-            />
-          </div>
-          <div className="setting-row">
-            <label>긴 휴식 인터벌 (회)</label>
-            <input
-              type="number"
-              min={1}
-              max={10}
-              value={settings.longBreakInterval}
-              onChange={(e) => updateField('longBreakInterval', Number(e.target.value))}
-              onBlur={handleNumberBlur}
-            />
-          </div>
+
+          {settings.mode === 'timer' ? (
+            <>
+              <div className="setting-row">
+                <label>작업 시간 (분)</label>
+                <input
+                  type="number"
+                  min={1}
+                  max={120}
+                  value={settings.workMinutes}
+                  onChange={(e) => updateField('workMinutes', Number(e.target.value))}
+                  onBlur={handleNumberBlur}
+                />
+              </div>
+              <div className="setting-row">
+                <label>짧은 휴식 (분)</label>
+                <input
+                  type="number"
+                  min={1}
+                  max={60}
+                  value={settings.shortBreakMinutes}
+                  onChange={(e) => updateField('shortBreakMinutes', Number(e.target.value))}
+                  onBlur={handleNumberBlur}
+                />
+              </div>
+              <div className="setting-row">
+                <label>긴 휴식 (분)</label>
+                <input
+                  type="number"
+                  min={1}
+                  max={60}
+                  value={settings.longBreakMinutes}
+                  onChange={(e) => updateField('longBreakMinutes', Number(e.target.value))}
+                  onBlur={handleNumberBlur}
+                />
+              </div>
+              <div className="setting-row">
+                <label>긴 휴식 인터벌 (회)</label>
+                <input
+                  type="number"
+                  min={1}
+                  max={10}
+                  value={settings.longBreakInterval}
+                  onChange={(e) => updateField('longBreakInterval', Number(e.target.value))}
+                  onBlur={handleNumberBlur}
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <p className="settings-hint">매 시 0~59분 사이의 시각을 설정합니다.</p>
+              <div className="setting-row">
+                <label>작업 시작 시각 (분)</label>
+                <input
+                  className={`alarm-minute-input${settings.alarmWorkMinute === settings.alarmBreakMinute ? ' input-warning' : ''}`}
+                  type="text"
+                  inputMode="numeric"
+                  value={settings.alarmWorkMinute}
+                  onChange={(e) => updateAlarmMinute('alarmWorkMinute', Number(e.target.value))}
+                  onBlur={(e) => handleAlarmBlur(e, 'alarmWorkMinute')}
+                />
+              </div>
+              <div className="setting-row">
+                <label>휴식 시작 시각 (분)</label>
+                <input
+                  className={`alarm-minute-input${settings.alarmWorkMinute === settings.alarmBreakMinute ? ' input-warning' : ''}`}
+                  type="text"
+                  inputMode="numeric"
+                  value={settings.alarmBreakMinute}
+                  onChange={(e) => updateAlarmMinute('alarmBreakMinute', Number(e.target.value))}
+                  onBlur={(e) => handleAlarmBlur(e, 'alarmBreakMinute')}
+                />
+              </div>
+              {settings.alarmWorkMinute === settings.alarmBreakMinute && (
+                <p className="settings-warning">작업과 휴식 시각이 같으면 휴식 영상만 재생됩니다.</p>
+              )}
+            </>
+          )}
         </section>
 
         <div>
@@ -140,8 +211,8 @@ export default function SettingsForm({
             <h2>미디어 설정</h2>
             <p className="settings-hint">미디어는 최대 5초간 재생됩니다. ESC로 스킵할 수 있습니다.</p>
 
-            {renderMediaSelect('종료 영상 (작업 → 휴식)', 'endMediaId')}
-            {renderMediaSelect('시작 영상 (휴식 → 작업)', 'startMediaId')}
+            {renderMediaSelect('휴식 영상 (작업 → 휴식)', 'endMediaId')}
+            {renderMediaSelect('작업 영상 (휴식 → 작업)', 'startMediaId')}
           </section>
 
           <section className="settings-section">

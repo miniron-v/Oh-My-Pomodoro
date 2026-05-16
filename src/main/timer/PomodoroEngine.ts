@@ -1,4 +1,4 @@
-import { type TimerPhase, type AppSettings, IPC_CHANNELS } from '../../shared/types'
+import { type TimerPhase, type AppSettings, type PomodoroMode, IPC_CHANNELS } from '../../shared/types'
 import { getSettings } from '../store/settingsStore'
 import { getMediaStoredPath } from '../store/mediaStore'
 import { getTimerWindow } from '../windows/timerWindow'
@@ -13,6 +13,8 @@ interface EngineState {
   completedWorkSessions: number
   nextPhaseAfterVideo: Exclude<TimerPhase, 'idle' | 'video-playing'> | null
 }
+
+let activeMode: PomodoroMode = 'timer'
 
 let state: EngineState = {
   phase: 'idle',
@@ -99,8 +101,63 @@ function resolveMediaPath(mediaId: string | null): string | null {
   return getMediaStoredPath(mediaId)
 }
 
+// --- 알람 모드 유틸 ---
+
+function getAlarmCurrentPhase(now: Date, workMin: number, breakMin: number): 'work' | 'short-break' {
+  const currentMinute = now.getMinutes()
+
+  if (workMin < breakMin) {
+    return (currentMinute >= workMin && currentMinute < breakMin) ? 'work' : 'short-break'
+  }
+  // workMin > breakMin (예: work=50, break=10)
+  return (currentMinute >= breakMin && currentMinute < workMin) ? 'short-break' : 'work'
+}
+
+function getSecondsUntilMinute(now: Date, targetMinute: number): number {
+  const currentMinute = now.getMinutes()
+  const currentSecond = now.getSeconds()
+
+  let diffMinutes = targetMinute - currentMinute
+  if (diffMinutes <= 0) diffMinutes += 60
+
+  return diffMinutes * 60 - currentSecond
+}
+
+function getAlarmNextEvent(now: Date, workMin: number, breakMin: number): { nextPhase: 'work' | 'short-break'; seconds: number } {
+  const currentPhase = getAlarmCurrentPhase(now, workMin, breakMin)
+
+  if (currentPhase === 'work') {
+    return { nextPhase: 'short-break', seconds: getSecondsUntilMinute(now, breakMin) }
+  }
+  return { nextPhase: 'work', seconds: getSecondsUntilMinute(now, workMin) }
+}
+
+function startAlarmCountdown(): void {
+  const settings = getSettings()
+  const now = new Date()
+  const { nextPhase, seconds } = getAlarmNextEvent(now, settings.alarmWorkMinute, settings.alarmBreakMinute)
+
+  state.nextPhaseAfterVideo = null
+  startCountdown(seconds)
+
+  // nextPhase는 "다음에 올 상태" → 현재 상태는 그 반대
+  if (nextPhase === 'short-break') {
+    state.phase = 'work'
+  } else {
+    state.phase = 'short-break'
+  }
+  broadcastPhaseChange()
+}
+
+// --- 공통 전환 로직 ---
+
 function onPhaseTimerEnd(): void {
   const settings = getSettings()
+
+  if (activeMode === 'alarm') {
+    onAlarmPhaseTimerEnd(settings)
+    return
+  }
 
   if (state.phase === 'work') {
     state.completedWorkSessions++
@@ -108,6 +165,16 @@ function onPhaseTimerEnd(): void {
     state.nextPhaseAfterVideo = isLongBreak ? 'long-break' : 'short-break'
     playTransitionVideo(resolveMediaPath(settings.endMediaId), settings.soundMode)
   } else if (state.phase === 'short-break' || state.phase === 'long-break') {
+    state.nextPhaseAfterVideo = 'work'
+    playTransitionVideo(resolveMediaPath(settings.startMediaId), settings.soundMode)
+  }
+}
+
+function onAlarmPhaseTimerEnd(settings: AppSettings): void {
+  if (state.phase === 'work') {
+    state.nextPhaseAfterVideo = 'short-break'
+    playTransitionVideo(resolveMediaPath(settings.endMediaId), settings.soundMode)
+  } else if (state.phase === 'short-break') {
     state.nextPhaseAfterVideo = 'work'
     playTransitionVideo(resolveMediaPath(settings.startMediaId), settings.soundMode)
   }
@@ -149,6 +216,15 @@ function onVideoComplete(): void {
   state.phase = nextPhase
   broadcastPhaseChange()
 
+  if (activeMode === 'alarm') {
+    // 영상 재생 후 실제 시각 기준으로 다음 이벤트까지 재계산
+    const settings = getSettings()
+    const now = new Date()
+    const { seconds } = getAlarmNextEvent(now, settings.alarmWorkMinute, settings.alarmBreakMinute)
+    startCountdown(seconds)
+    return
+  }
+
   const settings = getSettings()
   const seconds = getPhaseSeconds(nextPhase, settings)
   startCountdown(seconds)
@@ -157,15 +233,25 @@ function onVideoComplete(): void {
 export function startPomodoro(): void {
   const settings = getSettings()
   paused = false
+  activeMode = settings.mode
+
   state = {
-    phase: 'work',
+    phase: 'idle',
     remainingSeconds: 0,
     completedWorkSessions: 0,
     nextPhaseAfterVideo: null
   }
-  broadcastPhaseChange()
+
+  if (activeMode === 'alarm') {
+    startAlarmCountdown()
+  } else {
+    state.phase = 'work'
+    broadcastPhaseChange()
+    broadcastPaused()
+    startCountdown(getPhaseSeconds('work', settings))
+  }
+
   broadcastPaused()
-  startCountdown(getPhaseSeconds('work', settings))
 }
 
 export function stopPomodoro(): void {
@@ -193,7 +279,22 @@ export function pausePomodoro(): void {
 export function resumePomodoro(): void {
   if (!paused || state.phase === 'idle' || state.phase === 'video-playing') return
   paused = false
-  startCountdown(state.remainingSeconds)
+
+  if (activeMode === 'alarm') {
+    // 재개 시 실제 시각 기준으로 phase + 남은 시간 재계산
+    const settings = getSettings()
+    const now = new Date()
+    const currentPhase = getAlarmCurrentPhase(now, settings.alarmWorkMinute, settings.alarmBreakMinute)
+    if (state.phase !== currentPhase) {
+      state.phase = currentPhase
+      broadcastPhaseChange()
+    }
+    const { seconds } = getAlarmNextEvent(now, settings.alarmWorkMinute, settings.alarmBreakMinute)
+    startCountdown(seconds)
+  } else {
+    startCountdown(state.remainingSeconds)
+  }
+
   broadcastPaused()
 }
 

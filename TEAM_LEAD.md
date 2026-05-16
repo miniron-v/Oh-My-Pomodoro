@@ -72,7 +72,22 @@
 
 ## 3. 프로젝트 설계 규칙
 
-### 3.1 브랜치 전략
+### 3.1 버전 관리 (Semantic Versioning)
+
+`MAJOR.MINOR.PATCH` 형식을 따른다.
+
+| 구분 | 올리는 시점 | 예시 |
+|---|---|---|
+| **PATCH** (0.2.**X**) | 버그 수정, UI 미세 조정, 내부 리팩토링 | 영상 스케일링 수정, 클램프 버그 수정 |
+| **MINOR** (0.**X**.0) | 새 기능 추가, 기존 기능의 의미 있는 확장 (하위 호환 유지) | 알람 모드, 프리셋 시스템, 알림음 커스텀 |
+| **MAJOR** (**X**.0.0) | 하위 호환이 깨지는 변경, 또는 정식 출시 선언 | 설정 파일 포맷 호환 불가, 1.0.0 정식 출시 |
+
+- 각 자리는 단순 정수로, 9를 넘어도 올림하지 않는다 (0.9.0 → 0.10.0).
+- `1.0.0`은 "정식 출시"를 선언할 때만 올린다.
+- 버전은 `package.json`의 `version` 필드에서 단일 관리한다.
+- electron-builder가 `package.json`의 버전을 자동으로 빌드 파일명에 반영한다.
+
+### 3.2 브랜치 전략
 
 | 브랜치 | 용도 |
 |---|---|
@@ -85,7 +100,7 @@
 - `main`과 `develop`에는 GitHub Rulesets가 적용되어 있다 (직접 push 차단, PR 리뷰 승인 필수, force push/삭제 금지).
 - 머지는 반드시 팀장 검증 + 사용자 테스트 통과 후, 사용자가 PR을 승인하여 수행한다.
 
-### 3.2 커밋 컨벤션
+### 3.3 커밋 컨벤션
 
 ```
 <type>(<scope>): <subject>
@@ -106,14 +121,14 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 
 **scope**: 변경 대상 모듈 또는 컴포넌트명 (예: `timer`, `settings`, `ui`)
 
-### 3.3 디렉토리 구조 원칙
+### 3.4 디렉토리 구조 원칙
 
 - 기획서 확정 후 기술 스택에 맞춰 구체적 구조를 결정한다.
 - 관심사 분리(Separation of Concerns)를 따른다.
 - 컴포넌트/모듈 단위로 디렉토리를 구성한다.
 - 설정 파일은 프로젝트 루트에 배치한다.
 
-### 3.4 코드 작성 규칙
+### 3.5 코드 작성 규칙
 
 - 변수/함수명은 의미를 명확히 드러내는 이름을 사용한다.
 - 주석은 "왜(Why)"가 명확하지 않은 경우에만 작성한다.
@@ -122,7 +137,7 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 - OWASP Top 10 보안 취약점을 방지한다.
 - 사용하지 않는 코드는 주석 처리가 아닌 삭제한다.
 
-### 3.5 파일 네이밍 규칙
+### 3.6 파일 네이밍 규칙
 
 - 기획서 확정 후 기술 스택에 맞춰 구체적으로 결정한다.
 - 일관된 네이밍 패턴을 전체 프로젝트에 적용한다.
@@ -194,6 +209,7 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 | 5-2 | 영상 창 투명 배경 (알파 채널 보존) | `feature/transparent-video` | 완료 |
 | 5-3 | 타이머 창 숨기기 + 시스템 트레이 | `feature/timer-hide-tray` | 완료 |
 | 5-4 | 타이머 창 상태 기억 (위치/크기/숨기기) | `feature/timer-state-persist` | 완료 |
+| 6-1 | 알람 모드 (매 시 지정 시각에 작업/휴식 전환) | `feature/alarm-mode` | 완료 |
 
 ---
 
@@ -202,9 +218,9 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 | 항목 | 상태 |
 |---|---|
 | 기획서 | 확정 (`docs/SPEC.md`) |
-| 작업 계획 | Phase 0~3 완료, Phase 5 완료, 릴리즈 준비 중 |
+| 작업 계획 | Phase 0~3 완료, Phase 5 완료, Phase 6-1 완료 |
 | 현재 브랜치 | `develop` |
-| 현재 단계 | **Phase 5 완료, v0.2.0 릴리즈 준비** |
+| 현재 단계 | **v0.3.0 릴리즈 준비** |
 
 ### 남은 작업
 
@@ -230,6 +246,7 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 | 타이머 정확도 | Date.now() 기반, backgroundThrottling: false | 시스템 슬립/백그라운드 대응 |
 | 배포 형태 | zip (NSIS 아님) | 코드 서명 없는 상태에서 SmartScreen 허들 최소화 |
 | 아이콘 변환 | png-to-ico로 멀티사이즈 ico 생성 | electron-builder는 멀티사이즈 ico 미생성 |
+| 알람 모드 | PomodoroMode 타입 분기, 실제 시각 기반 카운트다운 | 영상 재생 후 Date 기준 재계산으로 어긋남 방지 |
 
 ---
 
@@ -243,3 +260,5 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 | 2026-05-15 | v0.1.0 릴리즈 완료. 디버깅 프로세스[8-1] 워크플로우에 추가. 빌드/배포 기술 결정 추가. |
 | 2026-05-16 | Phase 5 완료. 미디어 앱 내 저장, 투명 영상 창, 타이머 숨기기/트레이, 창 상태 기억. 기술 결정 갱신. |
 | 2026-05-16 | GitHub Rulesets 적용. 워크플로우 [10] PR 기반으로 변경. 브랜치 전략에 보호 규칙 추가. |
+| 2026-05-17 | Phase 6-1 완료. 알람 모드 추가 (설정 UI 모드 전환, 알람 엔진, 미디어 라벨 변경). |
+| 2026-05-17 | 버전 관리 규칙(SemVer) 문서화. v0.3.0 릴리즈. |
