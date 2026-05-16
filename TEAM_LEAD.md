@@ -194,6 +194,7 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 | 5-2 | 영상 창 투명 배경 (알파 채널 보존) | `feature/transparent-video` | 완료 |
 | 5-3 | 타이머 창 숨기기 + 시스템 트레이 | `feature/timer-hide-tray` | 완료 |
 | 5-4 | 타이머 창 상태 기억 (위치/크기/숨기기) | `feature/timer-state-persist` | 완료 |
+| 6-1 | 알람 모드 (매 시 지정 시각에 작업/휴식 전환) | `feature/alarm-mode` | 완료 |
 
 ---
 
@@ -202,9 +203,9 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 | 항목 | 상태 |
 |---|---|
 | 기획서 | 확정 (`docs/SPEC.md`) |
-| 작업 계획 | Phase 0~3 완료, Phase 5 완료, 릴리즈 준비 중 |
-| 현재 브랜치 | `develop` |
-| 현재 단계 | **Phase 5 완료, v0.2.0 릴리즈 준비** |
+| 작업 계획 | Phase 0~3 완료, Phase 5 완료, Phase 6-1 완료 |
+| 현재 브랜치 | `feature/alarm-mode` |
+| 현재 단계 | **Phase 6-1 완료, PR 대기** |
 
 ### 남은 작업
 
@@ -230,6 +231,7 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 | 타이머 정확도 | Date.now() 기반, backgroundThrottling: false | 시스템 슬립/백그라운드 대응 |
 | 배포 형태 | zip (NSIS 아님) | 코드 서명 없는 상태에서 SmartScreen 허들 최소화 |
 | 아이콘 변환 | png-to-ico로 멀티사이즈 ico 생성 | electron-builder는 멀티사이즈 ico 미생성 |
+| 알람 모드 | PomodoroMode 타입 분기, 실제 시각 기반 카운트다운 | 영상 재생 후 Date 기준 재계산으로 어긋남 방지 |
 
 ---
 
@@ -243,3 +245,4 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 | 2026-05-15 | v0.1.0 릴리즈 완료. 디버깅 프로세스[8-1] 워크플로우에 추가. 빌드/배포 기술 결정 추가. |
 | 2026-05-16 | Phase 5 완료. 미디어 앱 내 저장, 투명 영상 창, 타이머 숨기기/트레이, 창 상태 기억. 기술 결정 갱신. |
 | 2026-05-16 | GitHub Rulesets 적용. 워크플로우 [10] PR 기반으로 변경. 브랜치 전략에 보호 규칙 추가. |
+| 2026-05-17 | Phase 6-1 완료. 알람 모드 추가 (설정 UI 모드 전환, 알람 엔진, 미디어 라벨 변경). |
