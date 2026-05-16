@@ -13,10 +13,13 @@ function isValidSettings(value: unknown): value is AppSettings {
   if (typeof value !== 'object' || value === null) return false
   const s = value as Record<string, unknown>
   return (
+    (s.mode === 'timer' || s.mode === 'alarm') &&
     typeof s.workMinutes === 'number' &&
     typeof s.shortBreakMinutes === 'number' &&
     typeof s.longBreakMinutes === 'number' &&
     typeof s.longBreakInterval === 'number' &&
+    typeof s.alarmWorkMinute === 'number' &&
+    typeof s.alarmBreakMinute === 'number' &&
     (typeof s.startMediaId === 'string' || s.startMediaId === null) &&
     (typeof s.endMediaId === 'string' || s.endMediaId === null) &&
     (s.soundMode === 'video' || s.soundMode === 'alarm')

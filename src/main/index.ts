@@ -30,10 +30,13 @@ function migrateOldMediaPaths(): void {
   }
 
   setSettings({
+    mode: (settings['mode'] as 'timer' | 'alarm') ?? 'timer',
     workMinutes: settings['workMinutes'] as number ?? 25,
     shortBreakMinutes: settings['shortBreakMinutes'] as number ?? 5,
     longBreakMinutes: settings['longBreakMinutes'] as number ?? 15,
     longBreakInterval: settings['longBreakInterval'] as number ?? 4,
+    alarmWorkMinute: settings['alarmWorkMinute'] as number ?? 0,
+    alarmBreakMinute: settings['alarmBreakMinute'] as number ?? 50,
     startMediaId: newStartId,
     endMediaId: newEndId,
     soundMode: (settings['soundMode'] as 'video' | 'alarm') ?? 'video'
