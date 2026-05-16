@@ -6,10 +6,7 @@
 
 ## 주요 기능
 
-<p>
-  <img width="49%" alt="타이머 모드" src="https://github.com/user-attachments/assets/36002a87-536b-4959-8fc9-fd6e0b56b696" />
-  <img width="49%" alt="알람 모드" src="https://github.com/user-attachments/assets/126ea01c-5c43-46e7-8fc9-e0c47dbdf1dc" />
-</p>
+<p><img width="49%" alt="타이머 모드" src="https://github.com/user-attachments/assets/36002a87-536b-4959-8fc9-fd6e0b56b696" /> <img width="49%" alt="알람 모드" src="https://github.com/user-attachments/assets/126ea01c-5c43-46e7-8fc9-e0c47dbdf1dc" /></p>
 
 ### 두 가지 모드
 
