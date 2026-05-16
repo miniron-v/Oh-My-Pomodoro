@@ -1,6 +1,6 @@
 {
   "name": "oh-my-pomodoro",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "원하는 gif, 영상을 넣어 만드는 전체화면 뽀모도로 데스크톱 앱",
   "type": "module",
   "main": "./out/main/index.js",
