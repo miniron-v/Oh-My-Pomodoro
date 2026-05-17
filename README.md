@@ -1,15 +1,12 @@
 # Oh-My-Pomodoro
 
-<img width="800" height="500" alt="오마뽀 데모 2" src="https://github.com/user-attachments/assets/d0403f7d-8625-43cb-92d1-eae99c155d0f" />
+<img width="800" height="477" alt="오마뽀 3" src="https://github.com/user-attachments/assets/07cb3a8d-3faa-4a7e-8386-d3c130710664" />
 
 원하는 영상을 넣어 만드는 전체화면 뽀모도로 데스크톱 앱
 
 ## 주요 기능
 
-<p><img width="49%" alt="타이머 모드" src="https://github.com/user-attachments/assets/36002a87-536b-4959-8fc9-fd6e0b56b696" /> <img width="49%" height="506" alt="image" src="https://github.com/user-attachments/assets/57483baa-6b17-41e1-a51a-9382be2073cf" /></p>
-
-
-
+<p><img width="49%" alt="image" src="https://github.com/user-attachments/assets/e1fdb6fc-f61c-4749-8670-0025d1db8182" /> <img width="49%" alt="image" src="https://github.com/user-attachments/assets/3edc2547-7220-4fb5-8c70-f0ec82d9ab9f" /></p>
 
 ### 두 가지 모드
 
@@ -18,16 +15,17 @@
 
 ### 전체화면 영상 재생
 
-작업↔휴식이 전환될 때, 직접 등록한 영상이 전체화면으로 재생됩니다. 투명 배경 영상도 지원합니다.
+작업 ↔ 휴식이 전환될 때, 직접 등록한 영상이 전체화면으로 재생됩니다. 투명 배경 영상도 지원합니다.
 
 - 작업 영상 (휴식 → 작업), 휴식 영상 (작업 → 휴식)을 각각 설정
 - 앱에 영상을 등록해두고 골라 쓸 수 있습니다
 - 영상은 최대 5초간 재생되며, ESC를 누르면 바로 넘길 수 있습니다
-- 투명 배경을 사용하려면 APNG 또는 WebM을 권장합니다
+- 투명 배경을 사용하려면 APNG 또는 WebM을 권장합니다. gif는 테두리가 거칠게 나올 수 있습니다.
 
 ### 미니 타이머
 
-화면 위에 항상 떠 있는 작은 타이머입니다. 원하는 곳에 드래그해두면 위치와 크기를 기억합니다. 필요 없을 땐 숨기고, 작업 표시줄 아이콘으로 다시 꺼낼 수 있습니다.
+화면 위에 항상 떠 있는 작은 타이머입니다. 위치와 크기를 변경할 수 있습니다.
+필요 없을 땐 숨기고, 작업 표시줄 트레이 아이콘으로 다시 꺼낼 수 있습니다.
 
 ## 다운로드
 
@@ -42,4 +40,3 @@
 ## 시스템 요구사항
 
 - Windows 10 / 11
-- 별도 설치 불필요
