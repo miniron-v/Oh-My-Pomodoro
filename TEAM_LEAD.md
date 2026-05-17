@@ -210,6 +210,7 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 | 5-3 | 타이머 창 숨기기 + 시스템 트레이 | `feature/timer-hide-tray` | 완료 |
 | 5-4 | 타이머 창 상태 기억 (위치/크기/숨기기) | `feature/timer-state-persist` | 완료 |
 | 6-1 | 알람 모드 (매 시 지정 시각에 작업/휴식 전환) | `feature/alarm-mode` | 완료 |
+| 7-1 | APNG 포맷 지원, 투명 배경 안내 UI, 타이머 라벨 수정 | `feature/apng-support` | 완료 |
 
 ---
 
@@ -218,9 +219,9 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 | 항목 | 상태 |
 |---|---|
 | 기획서 | 확정 (`docs/SPEC.md`) |
-| 작업 계획 | Phase 0~3 완료, Phase 5 완료, Phase 6-1 완료 |
-| 현재 브랜치 | `develop` |
-| 현재 단계 | **v0.3.0 릴리즈 준비** |
+| 작업 계획 | Phase 0~3 완료, Phase 5 완료, Phase 6-1 완료, Phase 7-1 완료 |
+| 현재 브랜치 | `main` |
+| 현재 단계 | **v0.3.1 릴리즈 완료** |
 
 ### 남은 작업
 
@@ -238,7 +239,7 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 | 창 구조 | 설정 / 미니 타이머 / 전체화면 영상, 3개 분리 | 독립적 생명주기, alwaysOnTop 레벨 분리 |
 | 영상 창 | transparent + setOpacity/setIgnoreMouseEvents | 알파 채널 보존, Windows hide/show 우회 |
 | 영상 렌더링 | Canvas 기반 (document.createElement video) + clearRect | React StrictMode 이중 마운트 회피, 프레임 간 알파 보존 |
-| gif 재생 | ImageDecoder API + IPC 파일 읽기 | fetch가 커스텀 프로토콜 미지원, 정확한 1회 재생 |
+| gif/apng 재생 | ImageDecoder API + IPC 파일 읽기 (FrameAnimationPlayer) | fetch가 커스텀 프로토콜 미지원, 정확한 1회 재생, MIME type 분기로 GIF/APNG 공용 |
 | 미디어 관리 | 앱 내 복사(userData/media/) + 레지스트리 | 원본 삭제/이동에 안전, 중복 방지 |
 | 로컬 파일 접근 | media:// 커스텀 프로토콜 + mediaDir 기반 경로 검증 | 앱 내 미디어 디렉토리만 허용 |
 | 타이머 창 상태 | window-state.json에 위치/크기/숨기기 저장 | 디바운싱(300ms), 모니터 영역 보정 |
@@ -262,3 +263,4 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 | 2026-05-16 | GitHub Rulesets 적용. 워크플로우 [10] PR 기반으로 변경. 브랜치 전략에 보호 규칙 추가. |
 | 2026-05-17 | Phase 6-1 완료. 알람 모드 추가 (설정 UI 모드 전환, 알람 엔진, 미디어 라벨 변경). |
 | 2026-05-17 | 버전 관리 규칙(SemVer) 문서화. v0.3.0 릴리즈. |
+| 2026-05-17 | Phase 7-1 완료. APNG 포맷 지원, 투명 배경 안내 UI 추가, 타이머 라벨 수정. v0.3.1 릴리즈. |
