@@ -8,7 +8,8 @@ const MIME_TYPES: Record<string, string> = {
   '.webm': 'video/webm',
   '.mov': 'video/quicktime',
   '.avi': 'video/x-msvideo',
-  '.gif': 'image/gif'
+  '.gif': 'image/gif',
+  '.apng': 'image/apng'
 }
 
 export function registerMediaProtocol(): void {
