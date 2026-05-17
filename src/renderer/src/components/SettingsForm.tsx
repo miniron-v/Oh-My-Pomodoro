@@ -213,6 +213,7 @@ export default function SettingsForm({
 
             {renderMediaSelect('휴식 영상 (작업 → 휴식)', 'endMediaId')}
             {renderMediaSelect('작업 영상 (휴식 → 작업)', 'startMediaId')}
+            <p className="settings-hint">투명 배경을 사용하려면 APNG 또는 WebM을 권장합니다. GIF는 경계가 거칠 수 있으며, 나머지 형식은 투명을 지원하지 않습니다.</p>
           </section>
 
           <section className="settings-section">

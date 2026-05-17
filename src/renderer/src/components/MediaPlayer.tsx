@@ -39,19 +39,27 @@ function toPlayableUrl(source: string): string {
   return 'media://host/' + encodeURIComponent(source)
 }
 
-function isGif(source: string): boolean {
-  return source.toLowerCase().endsWith('.gif')
+const FRAME_ANIMATION_TYPES: Record<string, string> = {
+  '.gif': 'image/gif',
+  '.apng': 'image/apng'
+}
+
+function getFrameAnimationType(source: string): string | null {
+  const ext = source.toLowerCase().slice(source.lastIndexOf('.'))
+  return FRAME_ANIMATION_TYPES[ext] ?? null
 }
 
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-function GifPlayer({
+function FrameAnimationPlayer({
   source,
+  mimeType,
   onEnded
 }: {
   source: string
+  mimeType: string
   onEnded: () => void
 }): React.ReactElement {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -68,19 +76,19 @@ function GifPlayer({
     let cancelled = false
     let decoder: ImageDecoderInstance | null = null
 
-    async function loadGifBuffer(): Promise<ArrayBuffer> {
+    async function loadBuffer(): Promise<ArrayBuffer> {
       return window.electronAPI.readMediaFile(source)
     }
 
-    async function playGif(): Promise<void> {
+    async function playFrames(): Promise<void> {
       try {
-        const buffer = await loadGifBuffer()
+        const buffer = await loadBuffer()
         if (cancelled) return
 
         const ImageDecoderClass = (window as unknown as Record<string, unknown>)
           .ImageDecoder as ImageDecoderConstructor | undefined
         if (!ImageDecoderClass) {
-          console.error('[GifPlayer] ImageDecoder API not available')
+          console.error('[FrameAnimationPlayer] ImageDecoder API not available')
           onEndedRef.current()
           return
         }
@@ -94,7 +102,7 @@ function GifPlayer({
 
         decoder = new ImageDecoderClass({
           data: stream,
-          type: 'image/gif'
+          type: mimeType
         })
 
         await decoder.completed
@@ -154,13 +162,13 @@ function GifPlayer({
         }
       } catch (err) {
         if (!cancelled) {
-          console.error('[GifPlayer] error:', err)
+          console.error('[FrameAnimationPlayer] error:', err)
           onEndedRef.current()
         }
       }
     }
 
-    playGif()
+    playFrames()
 
     return () => {
       cancelled = true
@@ -173,7 +181,7 @@ function GifPlayer({
         decoder = null
       }
     }
-  }, [source])
+  }, [source, mimeType])
 
   return <canvas ref={canvasRef} className="media-fullscreen" />
 }
@@ -274,8 +282,9 @@ export default function MediaPlayer({
   soundMode,
   onEnded
 }: MediaPlayerProps): React.ReactElement {
-  if (isGif(source)) {
-    return <GifPlayer source={source} onEnded={onEnded} />
+  const frameType = getFrameAnimationType(source)
+  if (frameType) {
+    return <FrameAnimationPlayer source={source} mimeType={frameType} onEnded={onEnded} />
   }
 
   return <VideoPlayer source={source} soundMode={soundMode} onEnded={onEnded} />

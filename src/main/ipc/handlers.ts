@@ -6,7 +6,7 @@ import { listMedia, addMedia, removeMedia, getMediaStoredPath, getMediaDir } fro
 import type { AppSettings } from '../../shared/types'
 
 const MEDIA_FILTERS: Electron.FileFilter[] = [
-  { name: 'Media', extensions: ['mp4', 'webm', 'gif', 'mov', 'avi'] }
+  { name: 'Media', extensions: ['mp4', 'webm', 'gif', 'apng', 'mov', 'avi'] }
 ]
 
 function isValidSettings(value: unknown): value is AppSettings {
