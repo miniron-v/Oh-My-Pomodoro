@@ -8,7 +8,7 @@ const PHASE_LABELS: Record<string, string> = {
   'short-break': '휴식',
   'long-break': '긴 휴식',
   'video-playing': '전환 중',
-  idle: '대기'
+  idle: '작업'
 }
 
 export default function TimerPage(): React.ReactElement {
