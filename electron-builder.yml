@@ -1,5 +1,5 @@
 appId: com.oh-my-pomodoro.app
-productName: Oh-My-Pomodoro
+productName: Oh My Pomodoro
 directories:
   buildResources: resources
   output: dist
@@ -10,7 +10,6 @@ files:
   - "!**/CLAUDE.md"
   - "!**/TEAM_LEAD.md"
   - "!**/PLANNER.md"
-  - "!**/LICENSE"
   - "!**/.gitkeep"
 extraResources:
   - from: resources/sounds

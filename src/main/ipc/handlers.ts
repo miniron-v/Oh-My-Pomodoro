@@ -1,5 +1,6 @@
 import { ipcMain, dialog, type BrowserWindow } from 'electron'
 import { readFileSync } from 'fs'
+import { normalize } from 'path'
 import { IPC_CHANNELS } from '../../shared/types'
 import { getSettings, setSettings } from '../store/settingsStore'
 import { listMedia, addMedia, removeMedia, getMediaStoredPath, getMediaDir } from '../store/mediaStore'
@@ -81,8 +82,8 @@ export function registerIpcHandlers(_settingsWindow: BrowserWindow): void {
     if (typeof source !== 'string') {
       throw new Error('Invalid media source')
     }
-    const mediaBaseDir = getMediaDir()
-    if (!source.startsWith(mediaBaseDir)) {
+    const mediaBaseDir = normalize(getMediaDir())
+    if (!normalize(source).startsWith(mediaBaseDir)) {
       throw new Error('Unauthorized media path')
     }
     const data = readFileSync(source)
