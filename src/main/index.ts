@@ -49,19 +49,21 @@ app.whenReady().then(() => {
 
   Menu.setApplicationMenu(null)
 
-  app.on('browser-window-focus', (_event, win) => {
-    globalShortcut.register('F12', () => {
-      if (win.webContents.isDevToolsOpened()) {
-        win.webContents.closeDevTools()
-      } else {
-        win.webContents.openDevTools({ mode: 'detach' })
-      }
+  if (!app.isPackaged) {
+    app.on('browser-window-focus', (_event, win) => {
+      globalShortcut.register('F12', () => {
+        if (win.webContents.isDevToolsOpened()) {
+          win.webContents.closeDevTools()
+        } else {
+          win.webContents.openDevTools({ mode: 'detach' })
+        }
+      })
     })
-  })
 
-  app.on('browser-window-blur', () => {
-    globalShortcut.unregister('F12')
-  })
+    app.on('browser-window-blur', () => {
+      globalShortcut.unregister('F12')
+    })
+  }
 
   const settingsWindow = createSettingsWindow()
   registerIpcHandlers(settingsWindow)
