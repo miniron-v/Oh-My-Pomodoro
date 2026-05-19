@@ -211,6 +211,7 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 | 5-4 | 타이머 창 상태 기억 (위치/크기/숨기기) | `feature/timer-state-persist` | 완료 |
 | 6-1 | 알람 모드 (매 시 지정 시각에 작업/휴식 전환) | `feature/alarm-mode` | 완료 |
 | 7-1 | APNG 포맷 지원, 투명 배경 안내 UI, 타이머 라벨 수정 | `feature/apng-support` | 완료 |
+| - | 보안 강화, MIT LICENSE 추가, exe 파일명 변경 | `fix/security-audit` | 완료 |
 
 ---
 
@@ -220,8 +221,8 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 |---|---|
 | 기획서 | 확정 (`docs/SPEC.md`) |
 | 작업 계획 | Phase 0~3 완료, Phase 5 완료, Phase 6-1 완료, Phase 7-1 완료 |
-| 현재 브랜치 | `main` |
-| 현재 단계 | **v0.3.1 릴리즈 완료** |
+| 현재 브랜치 | `develop` |
+| 현재 단계 | **v0.3.2 릴리즈 준비** |
 
 ### 남은 작업
 
@@ -264,3 +265,4 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 | 2026-05-17 | Phase 6-1 완료. 알람 모드 추가 (설정 UI 모드 전환, 알람 엔진, 미디어 라벨 변경). |
 | 2026-05-17 | 버전 관리 규칙(SemVer) 문서화. v0.3.0 릴리즈. |
 | 2026-05-17 | Phase 7-1 완료. APNG 포맷 지원, 투명 배경 안내 UI 추가, 타이머 라벨 수정. v0.3.1 릴리즈. |
+| 2026-05-19 | 보안 강화, MIT LICENSE 추가, exe 파일명 변경. |

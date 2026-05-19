@@ -44,10 +44,10 @@ export function createTimerWindow(): BrowserWindow {
     show: !saved.hidden,
     backgroundColor: '#00000000',
     webPreferences: {
-      preload: join(import.meta.dirname, '../preload/index.mjs'),
+      preload: join(import.meta.dirname, '../preload/index.cjs'),
       contextIsolation: true,
       nodeIntegration: false,
-      sandbox: false,
+      sandbox: true,
       backgroundThrottling: false
     }
   })
