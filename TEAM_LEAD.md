@@ -221,8 +221,8 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 |---|---|
 | 기획서 | 확정 (`docs/SPEC.md`) |
 | 작업 계획 | Phase 0~3 완료, Phase 5 완료, Phase 6-1 완료, Phase 7-1 완료 |
-| 현재 브랜치 | `fix/security-audit` |
-| 현재 단계 | **보안 강화 완료 — PR 생성 대기** |
+| 현재 브랜치 | `develop` |
+| 현재 단계 | **v0.3.2 릴리즈 준비** |
 
 ### 남은 작업
 
