@@ -212,6 +212,7 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 | 6-1 | 알람 모드 (매 시 지정 시각에 작업/휴식 전환) | `feature/alarm-mode` | 완료 |
 | 7-1 | APNG 포맷 지원, 투명 배경 안내 UI, 타이머 라벨 수정 | `feature/apng-support` | 완료 |
 | - | 보안 강화, MIT LICENSE 추가, exe 파일명 변경 | `fix/security-audit` | 완료 |
+| - | 타이머 창을 작업 표시줄에 노출, 트레이 모듈 제거 | `feature/timer-taskbar` | 완료 |
 
 ---
 
@@ -221,8 +222,8 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 |---|---|
 | 기획서 | 확정 (`docs/SPEC.md`) |
 | 작업 계획 | Phase 0~3 완료, Phase 5 완료, Phase 6-1 완료, Phase 7-1 완료 |
-| 현재 브랜치 | `develop` |
-| 현재 단계 | **v0.3.2 릴리즈 준비** |
+| 현재 브랜치 | `main` |
+| 현재 단계 | **v0.4.0 릴리즈 완료** |
 
 ### 남은 작업
 
@@ -243,8 +244,8 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 | gif/apng 재생 | ImageDecoder API + IPC 파일 읽기 (FrameAnimationPlayer) | fetch가 커스텀 프로토콜 미지원, 정확한 1회 재생, MIME type 분기로 GIF/APNG 공용 |
 | 미디어 관리 | 앱 내 복사(userData/media/) + 레지스트리 | 원본 삭제/이동에 안전, 중복 방지 |
 | 로컬 파일 접근 | media:// 커스텀 프로토콜 + mediaDir 기반 경로 검증 | 앱 내 미디어 디렉토리만 허용 |
-| 타이머 창 상태 | window-state.json에 위치/크기/숨기기 저장 | 디바운싱(300ms), 모니터 영역 보정 |
-| 시스템 트레이 | 뽀모도로 실행 중에만 트레이 아이콘 활성화 | 타이머 표시/숨기기 토글, 설정, 종료 |
+| 타이머 창 상태 | window-state.json에 위치/크기 저장 | 디바운싱(300ms), 모니터 영역 보정 |
+| 타이머 창 노출 | 작업 표시줄에 일반 창으로 노출, 숨기기는 OS 최소화 | 트레이 의존 없이 일반 창 UX로 통일 |
 | 타이머 정확도 | Date.now() 기반, backgroundThrottling: false | 시스템 슬립/백그라운드 대응 |
 | 배포 형태 | zip (NSIS 아님) | 코드 서명 없는 상태에서 SmartScreen 허들 최소화 |
 | 아이콘 변환 | png-to-ico로 멀티사이즈 ico 생성 | electron-builder는 멀티사이즈 ico 미생성 |
@@ -266,3 +267,4 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 | 2026-05-17 | 버전 관리 규칙(SemVer) 문서화. v0.3.0 릴리즈. |
 | 2026-05-17 | Phase 7-1 완료. APNG 포맷 지원, 투명 배경 안내 UI 추가, 타이머 라벨 수정. v0.3.1 릴리즈. |
 | 2026-05-19 | 보안 강화, MIT LICENSE 추가, exe 파일명 변경. |
+| 2026-06-22 | 타이머 창을 작업 표시줄에 노출, 트레이 모듈 제거. v0.4.0 릴리즈. |
