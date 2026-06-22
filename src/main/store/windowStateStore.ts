@@ -7,15 +7,13 @@ export interface TimerWindowState {
   y: number
   width: number
   height: number
-  hidden: boolean
 }
 
 const DEFAULT_STATE: TimerWindowState = {
   x: -1,
   y: -1,
   width: 280,
-  height: 56,
-  hidden: false
+  height: 56
 }
 
 let statePath = ''
