@@ -9,7 +9,6 @@ import { registerMediaProtocol } from './protocol/mediaProtocol'
 import { startPomodoro, stopPomodoro, pausePomodoro, resumePomodoro, handleVideoEnded, handleVideoSkip } from './timer/PomodoroEngine'
 import { getSettings, setSettings } from './store/settingsStore'
 import { addMedia } from './store/mediaStore'
-import { createAppTray, destroyAppTray, updateTrayMenu } from './tray/appTray'
 
 function migrateOldMediaPaths(): void {
   const settings = getSettings() as Record<string, unknown>
@@ -72,13 +71,11 @@ app.whenReady().then(() => {
     hideSettingsWindow()
     createTimerWindow()
     createVideoWindow()
-    createAppTray()
     startPomodoro()
   })
 
   ipcMain.on(IPC_CHANNELS.TIMER_STOP, () => {
     stopPomodoro()
-    destroyAppTray()
     destroyTimerWindow()
     destroyVideoWindow()
     showSettingsWindow()
@@ -94,12 +91,10 @@ app.whenReady().then(() => {
 
   ipcMain.on(IPC_CHANNELS.TIMER_HIDE, () => {
     hideTimerWindow()
-    updateTrayMenu()
   })
 
   ipcMain.on(IPC_CHANNELS.TIMER_SHOW, () => {
     showTimerWindow()
-    updateTrayMenu()
   })
 
   ipcMain.on(IPC_CHANNELS.VIDEO_ENDED, () => {

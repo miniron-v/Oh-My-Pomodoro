@@ -33,15 +33,15 @@ export function createTimerWindow(): BrowserWindow {
     maxWidth: 560,
     maxHeight: 112,
     resizable: true,
-    minimizable: false,
+    minimizable: true,
     maximizable: false,
     closable: false,
     alwaysOnTop: true,
     frame: false,
     transparent: true,
-    skipTaskbar: true,
+    skipTaskbar: false,
     hasShadow: false,
-    show: !saved.hidden,
+    show: true,
     backgroundColor: '#00000000',
     webPreferences: {
       preload: join(import.meta.dirname, '../preload/index.cjs'),
@@ -88,21 +88,22 @@ export function getTimerWindow(): BrowserWindow | null {
 
 export function hideTimerWindow(): void {
   if (timerWindow) {
-    timerWindow.hide()
-    saveTimerWindowState({ hidden: true })
+    timerWindow.minimize()
   }
 }
 
 export function showTimerWindow(): void {
   if (timerWindow) {
+    if (timerWindow.isMinimized()) {
+      timerWindow.restore()
+    }
     timerWindow.show()
     timerWindow.setAlwaysOnTop(true)
-    saveTimerWindowState({ hidden: false })
   }
 }
 
 export function isTimerWindowVisible(): boolean {
-  return timerWindow !== null && timerWindow.isVisible()
+  return timerWindow !== null && timerWindow.isVisible() && !timerWindow.isMinimized()
 }
 
 export function destroyTimerWindow(): void {
